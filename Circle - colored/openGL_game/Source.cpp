@@ -118,7 +118,7 @@ int main() {
 	// culori
 	float g_color_buffer_data[10000];
 	for (int i = 0; i < count; i += 3) {
-		if (i % 6) {
+		if (i < count/2 || count - i < 4) {
 			g_color_buffer_data[i] = 1.0f;
 			g_color_buffer_data[i + 1] = 0.0f;
 		}
