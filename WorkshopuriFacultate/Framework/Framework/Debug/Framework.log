@@ -1,0 +1,24 @@
+﻿Build started 6/8/2014 5:30:46 PM.
+     1>Project "D:\UbiFramework\Framework\Framework\Framework.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ID:\UbiFramework\Framework\\include /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _CRT_SECURE_NO_WARNINGS /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Main.cpp
+         Main.cpp
+     1>d:\ubiframework\framework\framework\spritemanager.h(57): warning C4305: '=' : truncation from 'int' to 'char'
+     1>d:\ubiframework\framework\framework\spritemanager.h(57): warning C4309: '=' : truncation of constant value
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\UbiFramework\Framework\bin\x86\Framework_Debug.exe" /INCREMENTAL /NOLOGO /LIBPATH:D:\UbiFramework\Framework\\lib\x86 glew32.lib glfw3dll.lib opengl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\UbiFramework\Framework\bin\x86\Framework_Debug.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\UbiFramework\Framework\bin\x86\Framework_Debug.lib" /MACHINE:X86 Debug\Background.obj
+         Debug\EntityManager.obj
+         Debug\Main.obj
+         Debug\Matrix4.obj
+         Debug\Player.obj
+         Debug\Sprite.obj
+         Debug\SpriteManager.obj
+         Debug\stb_image.obj
+         Debug\TextRender.obj
+         Debug\Utils.obj
+         Framework.vcxproj -> D:\UbiFramework\Framework\bin\x86\Framework_Debug.exe
+     1>Done Building Project "D:\UbiFramework\Framework\Framework\Framework.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.57

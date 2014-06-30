@@ -1,0 +1,8 @@
+TODO:
+- Add move/rotate code for sprites
+		- Matrix 4X4 utils, bind to shader
+- Add sprite descriptor system
+		- ceva usor? asci? 
+		- Frame suport?
+- Add font rendering
+		-bitmap font

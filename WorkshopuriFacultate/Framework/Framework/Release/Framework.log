@@ -1,0 +1,25 @@
+﻿Build started 6/22/2014 10:24:38 PM.
+     1>Project "D:\UbiFramework\Framework\Framework\Framework.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ID:\UbiFramework\Framework\\include /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D _CRT_SECURE_NO_WARNINGS /D _MBCS /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Sprite.cpp
+         Sprite.cpp
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\UbiFramework\Framework\bin\x86\Framework_Release.exe" /NOLOGO /LIBPATH:D:\UbiFramework\Framework\\lib\x86 glew32.lib glfw3dll.lib opengl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\UbiFramework\Framework\bin\x86\Framework_Release.pdb" /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\UbiFramework\Framework\bin\x86\Framework_Release.lib" /MACHINE:X86 /SAFESEH Release\Background.obj
+         Release\Entity.obj
+         Release\EntityManager.obj
+         Release\Main.obj
+         Release\Matrix4.obj
+         Release\Player.obj
+         Release\Sprite.obj
+         Release\SpriteManager.obj
+         Release\stb_image.obj
+         Release\TextRender.obj
+         Release\Utils.obj
+         Generating code
+         Finished generating code
+         Framework.vcxproj -> D:\UbiFramework\Framework\bin\x86\Framework_Release.exe
+     1>Done Building Project "D:\UbiFramework\Framework\Framework\Framework.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:01.95

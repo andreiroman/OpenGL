@@ -1,0 +1,11 @@
+﻿Build started 6/22/2014 4:17:28 PM.
+     1>Project "D:\WorkshopuriFacultate\Workshop1\Prerequisites\glew-1.10.0\glew-1.10.0\build\vc10\glewinfo.vcxproj" on node 2 (Build target(s)).
+     1>Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"../../bin\Release\Win32\glewinfo.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:../../lib\Release\Win32\ glew32s.lib opengl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:"../../bin\Release\Win32\glewinfo.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"../../bin\Release\Win32\glewinfo.lib" /MACHINE:X86 /SAFESEH tmp\glewinfo\Release\Win32\glewinfo.obj
+         "D:\WorkshopuriFacultate\Workshop1\Prerequisites\glew-1.10.0\glew-1.10.0\lib\Release\Win32\glew32s.lib"
+         glewinfo.vcxproj -> D:\WorkshopuriFacultate\Workshop1\Prerequisites\glew-1.10.0\glew-1.10.0\build\vc10\../../bin\Release\Win32\glewinfo.exe
+     1>Done Building Project "D:\WorkshopuriFacultate\Workshop1\Prerequisites\glew-1.10.0\glew-1.10.0\build\vc10\glewinfo.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.27
