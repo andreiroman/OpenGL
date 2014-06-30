@@ -1,6 +1,10 @@
 #include <GL/glew.h> // include GLEW and new version of GL on Windows
 #include <GLFW/glfw3.h> // GLFW helper library
+#include <glm.hpp>
+
 #include <stdio.h>
+#include <vector>
+using namespace std;
 
 // functie banala de incarcat continutul unui fisier intr-un buffer
 char * LoadFileInMemory(const char *filename)
@@ -90,18 +94,32 @@ int main() {
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
 
+	//additional buffer
+	vector<unsigned int> indices;
+	indices.push_back(0);
+	indices.push_back(1);
+	indices.push_back(2);
+	indices.push_back(1);
+	indices.push_back(2);
+	indices.push_back(3);
+
+	// Generate a buffer for the indices
+	GLuint elementbuffer;
+	glGenBuffers(1, &elementbuffer);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
+
 	while (!glfwWindowShouldClose(window)) {
 		//..... Randare................. 
 		// stergem ce s-a desenat anterior
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		// spunem ce shader vom folosi pentru desenare
 		glUseProgram(shader_programme);
-		// facem bind la vertex buffer
-		glBindBuffer(GL_ARRAY_BUFFER, vbo);
-		// draw points 0-3 from the currently bound VAO with current in-use shader
-		// glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-		glDrawArrays(GL_TRIANGLES, 0, 4);
-		glDrawArrays(GL_TRIANGLES, 1, 3);
+		// Index buffer
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
+
+		// Draw the triangles !
+		glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, (void*)0);
 
 		// facem swap la buffere (Double buffer)
 		glfwSwapBuffers(window);

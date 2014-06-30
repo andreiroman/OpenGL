@@ -2,6 +2,10 @@
 #include <GLFW/glfw3.h> // GLFW helper library
 #include <stdio.h>
 
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
+
 // functie banala de incarcat continutul unui fisier intr-un buffer
 char * LoadFileInMemory(const char *filename)
 {
@@ -27,6 +31,12 @@ char * LoadFileInMemory(const char *filename)
 
 
 int main() {
+
+	// logging
+	/*
+	glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+	glDebugMessageCallback(openGLDebugCallback, NULL);
+	*/
 	// Initializare (se creeaza contextul)
 	if (!glfwInit()) {
 		fprintf(stderr, "ERROR: could not start GLFW3\n");
@@ -95,19 +105,11 @@ int main() {
 	// slot pentru atributul 1
 	glEnableVertexAttribArray(1);
 	glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
-	glVertexAttribPointer(
-		1,                                // attribute. No particular reason for 1, but must match the layout in the shader.
-		3,                                // size
-		GL_FLOAT,                         // type
-		GL_FALSE,                         // normalized?
-		0,                                // stride
-		(void*)0                          // array buffer offset
-		);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
 	float key = 0.001;
 	while (!glfwWindowShouldClose(window)) {
 		//..... Randare................. 
-
 		// Generam un buffer in memoria video si scriem in el punctele din ram
 		GLuint vbo = 0;
 		glGenBuffers(1, &vbo); // generam un buffer 
@@ -146,6 +148,8 @@ int main() {
 			vertex_buffer[9] += key;
 		}
 		
+		if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) break;
+
 		// stergem ce s-a desenat anterior
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		// spunem ce shader vom folosi pentru desenare
@@ -163,6 +167,11 @@ int main() {
 		glfwPollEvents();
 	}
 
+	glDeleteBuffers(12, &colorbuffer);
 	glfwTerminate();
+
+	_CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_DEBUG);
+	_CrtDumpMemoryLeaks();
+
 	return 0;
 }
