@@ -1,9 +1,0 @@
-﻿Build started 6/3/2014 2:30:01 PM.
-     1>Project "D:\UbiFramework\Framework\Framework\Framework.vcxproj" on node 2 (Build target(s)).
-     1>Link:
-         Framework.vcxproj -> D:\UbiFramework\Framework\bin\x64\Framework_Release.exe
-     1>Done Building Project "D:\UbiFramework\Framework\Framework\Framework.vcxproj" (Build target(s)).
-
-Build succeeded.
-
-Time Elapsed 00:00:00.04
