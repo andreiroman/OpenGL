@@ -108,7 +108,7 @@ int main() {
 		(void*)0                          // array buffer offset
 		);
 
-	const float m1 = 0.0002, m2 = 0.0004;
+	float m1 = 0.0002, m2 = 0.0004;
 	while (!glfwWindowShouldClose(window)) {
 		//..... Randare................. 
 

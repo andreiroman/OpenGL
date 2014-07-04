@@ -1,4 +1,4 @@
-﻿Build started 6/30/2014 1:13:48 PM.
+﻿Build started 6/30/2014 1:30:38 PM.
      1>Project "C:\Users\Andrei\Desktop\General\Square\openGL_game\openGL_game.vcxproj" on node 2 (Build target(s)).
      1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(388,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (openGL_game.vcxproj).  This can lead to incorrect clean and rebuild behavior.
      1>ClCompile:
@@ -13,4 +13,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.01
+Time Elapsed 00:00:01.70

@@ -38,7 +38,9 @@ int main() {
 	}
 
 	// Se creeaza fereastra
-	GLFWwindow* window = glfwCreateWindow(640, 480, "Workshop1", NULL, NULL);
+	int screen_width = 640;
+	int screen_height = 480;
+	GLFWwindow* window = glfwCreateWindow(screen_width, screen_height, "Workshop2", NULL, NULL);
 	if (!window) {
 		// nu am reusit sa facem fereastra, oprim totul si dam mesaj de eroare
 		printf("ERROR: could not open window with GLFW3\n");
