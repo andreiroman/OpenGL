@@ -3,6 +3,9 @@
 #include <GL/glew.h> // include GLEW and new version of GL on Windows
 #include <GLFW/glfw3.h> // GLFW helper library
 #include <glm.hpp>
+#include <matrix_transform.hpp>
+#include <type_ptr.hpp>
+
 #include "stb_image.h"
 #include "stb_image.cpp"
 
@@ -105,10 +108,10 @@ int main() {
 
 	// buffer cu vertecsi in RAM 
 	float vertex_buffer[] = {
-		0.5f, -0.5f, 0.0f, 1.0f, 1.0f,	// dreapta jos
 		-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,	// stanga jos
-		0.5f, 0.5f, 0.0f, 1.0f, 0.0f,	// dreapta sus
-		-0.5f, 0.5f, 0.0f, 0.0f, 0.0f	// stanga sus
+		 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,	// dreapta jos
+		 0.5f,  0.5f, 0.0f, 1.0f, 1.0f,	// dreapta sus
+		-0.5f,  0.5f, 0.0f, 0.0f, 1.0f	// stanga sus
 	};
 
 	// Generam un buffer in memoria video si scriem in el punctele din ram
@@ -123,19 +126,19 @@ int main() {
 	//additional buffer, 8 bytes leak
 	unsigned int indices[6] = {
 		0, 1, 2,
-		1, 2, 3
+		2, 3, 0
 	};
 
 	// Generate a buffer for the indices
 	GLuint elementbuffer;
 	glGenBuffers(1, &elementbuffer);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), &indices, GL_STATIC_DRAW);
 
 	// Specify the layout of the vertex data
 	GLint posAttrib = glGetAttribLocation(shader_programme, "vertex_position");
 	glEnableVertexAttribArray(posAttrib);
-	glVertexAttribPointer(posAttrib, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), 0);
+	glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), 0);
 
 	GLint texAttrib = glGetAttribLocation(shader_programme, "texture_coordinates");
 	glEnableVertexAttribArray(texAttrib);
