@@ -16,51 +16,9 @@
 #include <vector>
 using namespace std;
 
-// functie banala de incarcat continutul unui fisier intr-un buffer
-char * LoadFileInMemory(const char *filename)
-{
-	int size = 0;
-	char *buffer = NULL;
-	FILE *f = fopen(filename, "rb");
-	if (f == NULL)
-	{
-		return NULL;
-	}
-	fseek(f, 0, SEEK_END);
-	size = ftell(f);
-	fseek(f, 0, SEEK_SET);
-	buffer = new char[size + 1];
-	if (size != fread(buffer, sizeof(char), size, f))
-	{
-		delete[] buffer;
-	}
-	fclose(f);
-	buffer[size] = '\000';
-	return buffer;
-}
-
-// exemplu de implementare
-void FlipTexture(unsigned char* image_data, int x, int y, int n)
-{
-	//flip texture
-	int width_in_bytes = x * 4;
-	unsigned char *top = NULL;
-	unsigned char *bottom = NULL;
-	unsigned char temp = 0;
-	int half_height = y / 2;
-
-	for (int row = 0; row < half_height; row++) {
-		top = image_data + row * width_in_bytes;
-		bottom = image_data + (y - row - 1) * width_in_bytes;
-		for (int col = 0; col < width_in_bytes; col++) {
-			temp = *top;
-			*top = *bottom;
-			*bottom = temp;
-			top++;
-			bottom++;
-		}
-	}
-}
+char * LoadFileInMemory(const char *filename); // load file to buffer
+void FlipTexture(unsigned char* image_data, int x, int y, int n); // flip image
+inline void count_fps(GLFWwindow* window, double *t1, double t2, int *nrf);
 
 int main() {
 	// Initializare (se creeaza contextul)
@@ -108,10 +66,14 @@ int main() {
 
 	// buffer cu vertecsi in RAM 
 	float vertex_buffer[] = {
-		-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,	// stanga jos
-		 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,	// dreapta jos
-		 0.5f,  0.5f, 0.0f, 1.0f, 1.0f,	// dreapta sus
-		-0.5f,  0.5f, 0.0f, 0.0f, 1.0f	// stanga sus
+		-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,		// stanga jos
+		 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,		// dreapta jos
+		 0.5f,  0.5f, 0.0f, 1.0f, 1.0f,		// dreapta sus
+		-0.5f,  0.5f, 0.0f, 0.0f, 1.0f,		// stanga sus
+		-0.75f, -0.35f, 0.0f, 0.0f, 0.0f,	// stanga jos
+		 0.25f, -0.35f, 0.0f, 1.0f, 0.0f,	// dreapta jos
+		 0.25f,  0.75f, 0.0f, 1.0f, 1.0f,	// dreapta sus
+		-0.75f,  0.75f, 0.0f, 0.0f, 1.0f		// stanga sus
 	};
 
 	// Generam un buffer in memoria video si scriem in el punctele din ram
@@ -124,16 +86,18 @@ int main() {
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
 
 	//additional buffer, 8 bytes leak
-	unsigned int indices[6] = {
+	unsigned int indices[] = {
 		0, 1, 2,
-		2, 3, 0
+		2, 3, 0,
+		4, 5, 6,
+		6, 7, 4
 	};
 
 	// Generate a buffer for the indices
 	GLuint elementbuffer;
 	glGenBuffers(1, &elementbuffer);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), &indices, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), &indices, GL_STATIC_DRAW);
 
 	// Specify the layout of the vertex data
 	GLint posAttrib = glGetAttribLocation(shader_programme, "vertex_position");
@@ -163,10 +127,20 @@ int main() {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // setam samplare cu interpolare liniara
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); // setam samplare cu interpolare liniara
 
-	int tex_loc = glGetUniformLocation(shader_programme, "tex");
+	int tex_loc = glGetUniformLocation(shader_programme, "basic_texture");
+
+	// transparency
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	double init_time = glfwGetTime();
+	int nrf = 0;
 
 	while (!glfwWindowShouldClose(window)) {
 		//..... Randare................. 
+		// FPS counter
+		count_fps(window, &init_time, glfwGetTime(), &(++nrf));
+		
 		// stergem ce s-a desenat anterior
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		// spunem ce shader vom folosi pentru desenare
@@ -179,7 +153,7 @@ int main() {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
 
 		// Draw the triangles !
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (void*)0);
+		glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, (void*)0);
 
 		// facem swap la buffere (Double buffer)
 		glfwSwapBuffers(window);
@@ -203,4 +177,62 @@ int main() {
 	_CrtDumpMemoryLeaks();
 
 	return 0;
+}
+
+// fps_counter
+inline void count_fps(GLFWwindow* window, double *t1, double t2, int *nrf) {
+	if (t2 - *t1 >= 1.0) {
+		char tmp[10];
+		sprintf(tmp, "fps: %d", *nrf);
+		glfwSetWindowTitle(window, tmp);
+		*nrf = 0;
+		*t1 += 1.0;
+	}
+	
+}
+
+// Flips texture
+void FlipTexture(unsigned char* image_data, int x, int y, int n)
+{
+	//flip texture
+	int width_in_bytes = x * 4;
+	unsigned char *top = NULL;
+	unsigned char *bottom = NULL;
+	unsigned char temp = 0;
+	int half_height = y / 2;
+
+	for (int row = 0; row < half_height; row++) {
+		top = image_data + row * width_in_bytes;
+		bottom = image_data + (y - row - 1) * width_in_bytes;
+		for (int col = 0; col < width_in_bytes; col++) {
+			temp = *top;
+			*top = *bottom;
+			*bottom = temp;
+			top++;
+			bottom++;
+		}
+	}
+}
+
+// load file in a buffer
+char * LoadFileInMemory(const char *filename)
+{
+	int size = 0;
+	char *buffer = NULL;
+	FILE *f = fopen(filename, "rb");
+	if (f == NULL)
+	{
+		return NULL;
+	}
+	fseek(f, 0, SEEK_END);
+	size = ftell(f);
+	fseek(f, 0, SEEK_SET);
+	buffer = new char[size + 1];
+	if (size != fread(buffer, sizeof(char), size, f))
+	{
+		delete[] buffer;
+	}
+	fclose(f);
+	buffer[size] = '\000';
+	return buffer;
 }
