@@ -14,11 +14,85 @@
 
 #include <stdio.h>
 #include <vector>
+#include <time.h>
 using namespace std;
 
 char * LoadFileInMemory(const char *filename); // load file to buffer
 void FlipTexture(unsigned char* image_data, int x, int y, int n); // flip image
 inline void count_fps(GLFWwindow* window, double *t1, double t2, int *nrf);
+
+// patrat, 4 noduri
+class Sprite {
+public:
+	float v[20]; // vertex_buffer
+
+	Sprite() {};
+	// ordinea de desenare: 0 1 2 2 3 0
+	Sprite(float x, float y, float sz) { // centrul de referinta pentru patrat si marimea
+		v[0] = -sz + x, v[1] = -sz + y, v[2] = 0.0f, v[3] = 0.0f, v[4] = 0.0f;		// stanga jos
+		v[5] = sz + x, v[6] = -sz + y, v[7] = 0.0f, v[8] = 1.0f, v[9] = 0.0f;		// dreapta jos
+		v[10] = sz + x, v[11] = sz + y, v[12] = 0.0f, v[13] = 1.0f, v[14] = 1.0f;	// dreapta sus
+		v[15] = -sz + x, v[16] = sz + y, v[17] = 0.0f, v[18] = 0.0f, v[19] = 1.0f;	// stanga sus
+	}
+	void up() {
+		v[1] += 0.0005, v[6] += 0.0005;
+		v[11] += 0.0005, v[16] += 0.0005;
+	}
+	~Sprite() {}
+};
+
+class SpriteManager {
+public:
+	vector <Sprite*> spr;	// sprite master vector
+	SpriteManager() {}
+
+	void addSprite(Sprite *s) {
+		spr.push_back(s);
+	}
+	void allup() {
+		vector<Sprite*>::iterator it;
+		for (it = spr.begin(); it != spr.end();) {
+			(*it)->up();
+			if ((*it)->v[1] > 1) {
+				delete *it;
+				it = spr.erase(it);
+			}
+			else {
+				++it;
+			}
+		}
+	}
+
+	void Draw() {
+		int nrE = spr.size();
+
+		unsigned int *index_buffer = new unsigned int[nrE * 6];
+		for (int i = 0; i < nrE; i++) {
+			index_buffer[6 * i] = 4 * i;
+			index_buffer[6 * i + 1] = 4 * i + 1;
+			index_buffer[6 * i + 2] = 4 * i + 2;
+			index_buffer[6 * i + 3] = 4 * i + 2;
+			index_buffer[6 * i + 4] = 4 * i + 3;
+			index_buffer[6 * i + 5] = 4 * i;
+		}
+
+		GLuint elementbuffer;
+		glGenBuffers(1, &elementbuffer);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, nrE * 6 * sizeof(unsigned int), index_buffer, GL_STATIC_DRAW);
+
+		// Draw the triangles !
+		glDrawElements(GL_TRIANGLES, 6 * nrE, GL_UNSIGNED_INT, (void*)0);
+		delete[] index_buffer;
+	}
+	~SpriteManager() {
+		for (int i = 0; i < spr.size(); i++)
+			delete spr.at(i);
+		spr.clear();
+		vector<Sprite*>(spr).swap(spr);
+	}
+
+};
 
 int main() {
 	// Initializare (se creeaza contextul)
@@ -64,83 +138,81 @@ int main() {
 	delete[] vertex_shader;
 	delete[] fragment_shader;
 
-	// buffer cu vertecsi in RAM 
-	float vertex_buffer[] = {
-		-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,		// stanga jos
-		 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,		// dreapta jos
-		 0.5f,  0.5f, 0.0f, 1.0f, 1.0f,		// dreapta sus
-		-0.5f,  0.5f, 0.0f, 0.0f, 1.0f,		// stanga sus
-		-0.75f, -0.35f, 0.0f, 0.0f, 0.0f,	// stanga jos
-		 0.25f, -0.35f, 0.0f, 1.0f, 0.0f,	// dreapta jos
-		 0.25f,  0.75f, 0.0f, 1.0f, 1.0f,	// dreapta sus
-		-0.75f,  0.75f, 0.0f, 0.0f, 1.0f		// stanga sus
-	};
-
-	// Generam un buffer in memoria video si scriem in el punctele din ram
-	GLuint vbo = 0;
-	glGenBuffers(1, &vbo); // generam un buffer 
-	glBindBuffer(GL_ARRAY_BUFFER, vbo); // setam bufferul generat ca bufferul curent 
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_buffer), vertex_buffer, GL_STATIC_DRAW); //  scriem in bufferul din memoria video informatia din bufferul din memoria RAM
-
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-
-	//additional buffer, 8 bytes leak
-	unsigned int indices[] = {
-		0, 1, 2,
-		2, 3, 0,
-		4, 5, 6,
-		6, 7, 4
-	};
-
-	// Generate a buffer for the indices
-	GLuint elementbuffer;
-	glGenBuffers(1, &elementbuffer);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), &indices, GL_STATIC_DRAW);
-
-	// Specify the layout of the vertex data
-	GLint posAttrib = glGetAttribLocation(shader_programme, "vertex_position");
-	glEnableVertexAttribArray(posAttrib);
-	glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), 0);
-
-	GLint texAttrib = glGetAttribLocation(shader_programme, "texture_coordinates");
-	glEnableVertexAttribArray(texAttrib);
-	glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
-
 	// incarcam imaginea din fisier si ii fortam canalele RGBA
 	int x, y, n;
 	int force_channels = 4;
 	unsigned char* image_data = stbi_load("1.png", &x, &y, &n, force_channels);
-	FlipTexture(image_data, x, y, n);
+	FlipTexture(image_data, x, y, n); //flip
 
-	// Trimitem textura la memoria video
-	GLuint tex = 0;
-	glGenTextures(1, &tex);
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, tex);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, x, y, 0, GL_RGBA, GL_UNSIGNED_BYTE, image_data);
-
-	// setam parametri de sampling
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); //ce se intampla cand coordonata nu se inscrie in limite
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE); //ce se intampla cand coordonata nu se inscrie in limite
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // setam samplare cu interpolare liniara
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); // setam samplare cu interpolare liniara
-
-	int tex_loc = glGetUniformLocation(shader_programme, "basic_texture");
-
-	// transparency
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	SpriteManager *s = new SpriteManager();
 
 	double init_time = glfwGetTime();
+	double first_press_time = glfwGetTime();
+	double second_press_time;
 	int nrf = 0;
+
+	srand(time(NULL));
 
 	while (!glfwWindowShouldClose(window)) {
 		//..... Randare................. 
 		// FPS counter
 		count_fps(window, &init_time, glfwGetTime(), &(++nrf));
-		
+		//----------
+		if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
+			second_press_time = glfwGetTime();
+			if (second_press_time - first_press_time > 0.15f) {
+				float obj_size = (float)(rand() % 100 + 30) / 500;
+				s->addSprite(new Sprite(
+					(float)(rand() % 200 - 100) / 100, -1.0f - (obj_size / 2), obj_size));
+				first_press_time = second_press_time;
+			}
+		}
+
+		s->allup();
+		printf("%d\n", s->spr.size());
+		int nrE = s->spr.size();
+		float * vertex_buffer = new float[nrE * 20];
+		for (int i = 0; i < nrE; i++)
+			memcpy(vertex_buffer + 20 * i, s->spr.at(i)->v, 20 * sizeof(float));
+
+		// Generam un buffer in memoria video si scriem in el punctele din ram
+		GLuint vbo = 0;
+		glGenBuffers(1, &vbo); // generam un buffer 
+		glBindBuffer(GL_ARRAY_BUFFER, vbo); // setam bufferul generat ca bufferul curent 
+		glBufferData(GL_ARRAY_BUFFER, nrE * 20 * sizeof(float), vertex_buffer, GL_STATIC_DRAW);
+
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+
+		// Specify the layout of the vertex data
+		GLint posAttrib = glGetAttribLocation(shader_programme, "vertex_position");
+		glEnableVertexAttribArray(posAttrib);
+		glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), 0);
+
+		GLint texAttrib = glGetAttribLocation(shader_programme, "texture_coordinates");
+		glEnableVertexAttribArray(texAttrib);
+		glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
+
+
+		// Trimitem textura la memoria video
+		GLuint tex = 0;
+		glGenTextures(1, &tex);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, tex);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, x, y, 0, GL_RGBA, GL_UNSIGNED_BYTE, image_data);
+
+		// setam parametri de sampling
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); //ce se intampla cand coordonata nu se inscrie in limite
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE); //ce se intampla cand coordonata nu se inscrie in limite
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // setam samplare cu interpolare liniara
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); // setam samplare cu interpolare liniara
+
+		int tex_loc = glGetUniformLocation(shader_programme, "basic_texture");
+
+		// transparency
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		//----------
 		// stergem ce s-a desenat anterior
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		// spunem ce shader vom folosi pentru desenare
@@ -149,16 +221,16 @@ int main() {
 		glBindTexture(GL_TEXTURE_2D, tex);
 		glUniform1i(tex_loc, 0); // use active texture 0
 
-		// Index buffer
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
-
-		// Draw the triangles !
-		glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, (void*)0);
+		s->Draw();
+		delete[] vertex_buffer;
 
 		// facem swap la buffere (Double buffer)
 		glfwSwapBuffers(window);
 
 		glfwPollEvents();
+		if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_ESCAPE)) {
+			glfwSetWindowShouldClose(window, 1);
+		}
 	}
 
 	glDetachShader(shader_programme, vs);
@@ -166,11 +238,12 @@ int main() {
 	glDeleteShader(vs);
 	glDeleteShader(fs);
 
-	glDeleteBuffers(12 * sizeof(float), &vbo);
-	glDeleteBuffers(4 * sizeof(unsigned int), &elementbuffer);
+//	glDeleteBuffers(12 * sizeof(float), &vbo);
+//	glDeleteBuffers(4 * sizeof(unsigned int), &elementbuffer);
 	glDeleteBuffers(1, &vs);
 	glDeleteBuffers(1, &fs);
 
+	delete s;
 	stbi_image_free(image_data);
 
 	glfwTerminate();
