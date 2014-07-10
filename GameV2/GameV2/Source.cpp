@@ -148,16 +148,30 @@ int main() {
 	unsigned char* image_data = stbi_load("1.png", &x, &y, &n, force_channels);
 	FlipTexture(image_data, x, y, n); //flip
 
+	// Trimitem textura la memoria video
+	GLuint tex = 0;
+	glGenTextures(1, &tex);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, tex);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, x, y, 0, GL_RGBA, GL_UNSIGNED_BYTE, image_data);
+
+	// setam parametri de sampling
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); //ce se intampla cand coordonata nu se inscrie in limite
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE); //ce se intampla cand coordonata nu se inscrie in limite
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // setam samplare cu interpolare liniara
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); // setam samplare cu interpolare liniara
+
+	int tex_loc = glGetUniformLocation(shader_programme, "basic_texture");
+	// transparency
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	SpriteManager *s = new SpriteManager();
 
 	double first_press_time = glfwGetTime();
 	double second_press_time;
 
 	srand(time(NULL));
-
-	// transparency
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	while (!glfwWindowShouldClose(window)) {
 		//..... Randare................. 
@@ -187,9 +201,6 @@ int main() {
 		glBindBuffer(GL_ARRAY_BUFFER, vbo); // setam bufferul generat ca bufferul curent 
 		glBufferData(GL_ARRAY_BUFFER, nrE * 20 * sizeof(float), vertex_buffer, GL_STATIC_DRAW);
 
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-
 		// Specify the layout of the vertex data
 		GLint posAttrib = glGetAttribLocation(shader_programme, "vertex_position");
 		glEnableVertexAttribArray(posAttrib);
@@ -198,22 +209,6 @@ int main() {
 		GLint texAttrib = glGetAttribLocation(shader_programme, "texture_coordinates");
 		glEnableVertexAttribArray(texAttrib);
 		glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
-
-
-		// Trimitem textura la memoria video
-		GLuint tex = 0;
-		glGenTextures(1, &tex);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, tex);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, x, y, 0, GL_RGBA, GL_UNSIGNED_BYTE, image_data);
-
-		// setam parametri de sampling
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); //ce se intampla cand coordonata nu se inscrie in limite
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE); //ce se intampla cand coordonata nu se inscrie in limite
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // setam samplare cu interpolare liniara
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); // setam samplare cu interpolare liniara
-
-		int tex_loc = glGetUniformLocation(shader_programme, "basic_texture");
 
 		//----------
 		// stergem ce s-a desenat anterior
@@ -227,7 +222,6 @@ int main() {
 		s->Draw();
 		delete[] vertex_buffer;
 		glDeleteBuffers(1, &vbo);
-		glDeleteTextures(1, &tex);
 
 		// facem swap la buffere (Double buffer)
 		glfwSwapBuffers(window);
@@ -243,7 +237,7 @@ int main() {
 	glDeleteShader(vs);
 	glDeleteShader(fs);
 
-//	glDeleteBuffers(12 * sizeof(float), &vbo);
+	glDeleteTextures(1, &tex);
 	glDeleteBuffers(1, &vs);
 	glDeleteBuffers(1, &fs);
 
