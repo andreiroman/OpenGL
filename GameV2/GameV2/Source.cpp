@@ -19,7 +19,7 @@ using namespace std;
 
 char * LoadFileInMemory(const char *filename); // load file to buffer
 void FlipTexture(unsigned char* image_data, int x, int y, int n); // flip image
-inline void count_fps(GLFWwindow* window, double *t1, double t2, int *nrf);
+void _update_fps_counter(GLFWwindow* window);
 
 // patrat, 4 noduri
 class Sprite {
@@ -43,31 +43,34 @@ public:
 
 class SpriteManager {
 public:
-	vector <Sprite*> spr;	// sprite master vector
-	SpriteManager() {}
+	Sprite** sprites;	// sprite master vector
+	int nrSprites;
+	SpriteManager() {
+		sprites = (Sprite**)malloc(1000 * sizeof(Sprite*));
+		nrSprites = 0;
+	}
 
 	void addSprite(Sprite *s) {
-		spr.push_back(s);
+		sprites[nrSprites++] = s;
 	}
+
 	void allup() {
-		vector<Sprite*>::iterator it;
-		for (it = spr.begin(); it != spr.end();) {
-			(*it)->up();
-			if ((*it)->v[1] > 1) {
-				delete *it;
-				it = spr.erase(it);
+		for (int i = 0; i < nrSprites; ) {
+			sprites[i]->up();
+			if (sprites[i]->v[1] > 1) {
+				delete sprites[i];
+				sprites[i] = sprites[--nrSprites];
+				sprites[nrSprites] = NULL;
 			}
 			else {
-				++it;
+				++i;
 			}
 		}
 	}
 
 	void Draw() {
-		int nrE = spr.size();
-
-		unsigned int *index_buffer = new unsigned int[nrE * 6];
-		for (int i = 0; i < nrE; i++) {
+		unsigned int *index_buffer = new unsigned int[nrSprites * 6];
+		for (int i = 0; i < nrSprites; i++) {
 			index_buffer[6 * i] = 4 * i;
 			index_buffer[6 * i + 1] = 4 * i + 1;
 			index_buffer[6 * i + 2] = 4 * i + 2;
@@ -79,17 +82,18 @@ public:
 		GLuint elementbuffer;
 		glGenBuffers(1, &elementbuffer);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, nrE * 6 * sizeof(unsigned int), index_buffer, GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, nrSprites * 6 * sizeof(unsigned int), index_buffer, GL_STATIC_DRAW);
 
 		// Draw the triangles !
-		glDrawElements(GL_TRIANGLES, 6 * nrE, GL_UNSIGNED_INT, (void*)0);
+		glDrawElements(GL_TRIANGLES, 6 * nrSprites, GL_UNSIGNED_INT, (void*)0);
 		delete[] index_buffer;
+		glDeleteBuffers(nrSprites * 6 * sizeof(unsigned int), &elementbuffer);
+
 	}
 	~SpriteManager() {
-		for (int i = 0; i < spr.size(); i++)
-			delete spr.at(i);
-		spr.clear();
-		vector<Sprite*>(spr).swap(spr);
+		for (int i = 0; i < nrSprites; i++)
+			delete sprites[i];
+		free(sprites);
 	}
 
 };
@@ -146,17 +150,19 @@ int main() {
 
 	SpriteManager *s = new SpriteManager();
 
-	double init_time = glfwGetTime();
 	double first_press_time = glfwGetTime();
 	double second_press_time;
-	int nrf = 0;
 
 	srand(time(NULL));
+
+	// transparency
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	while (!glfwWindowShouldClose(window)) {
 		//..... Randare................. 
 		// FPS counter
-		count_fps(window, &init_time, glfwGetTime(), &(++nrf));
+		_update_fps_counter(window);
 		//----------
 		if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
 			second_press_time = glfwGetTime();
@@ -169,11 +175,11 @@ int main() {
 		}
 
 		s->allup();
-		printf("%d\n", s->spr.size());
-		int nrE = s->spr.size();
+		printf("%d\n", s->nrSprites);
+		int nrE = s->nrSprites;
 		float * vertex_buffer = new float[nrE * 20];
 		for (int i = 0; i < nrE; i++)
-			memcpy(vertex_buffer + 20 * i, s->spr.at(i)->v, 20 * sizeof(float));
+			memcpy(vertex_buffer + 20 * i, s->sprites[i]->v, 20 * sizeof(float));
 
 		// Generam un buffer in memoria video si scriem in el punctele din ram
 		GLuint vbo = 0;
@@ -209,9 +215,6 @@ int main() {
 
 		int tex_loc = glGetUniformLocation(shader_programme, "basic_texture");
 
-		// transparency
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		//----------
 		// stergem ce s-a desenat anterior
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -223,6 +226,8 @@ int main() {
 
 		s->Draw();
 		delete[] vertex_buffer;
+		glDeleteBuffers(1, &vbo);
+		glDeleteTextures(1, &tex);
 
 		// facem swap la buffere (Double buffer)
 		glfwSwapBuffers(window);
@@ -239,7 +244,6 @@ int main() {
 	glDeleteShader(fs);
 
 //	glDeleteBuffers(12 * sizeof(float), &vbo);
-//	glDeleteBuffers(4 * sizeof(unsigned int), &elementbuffer);
 	glDeleteBuffers(1, &vs);
 	glDeleteBuffers(1, &fs);
 
@@ -253,15 +257,20 @@ int main() {
 }
 
 // fps_counter
-inline void count_fps(GLFWwindow* window, double *t1, double t2, int *nrf) {
-	if (t2 - *t1 >= 1.0) {
-		char tmp[10];
-		sprintf(tmp, "fps: %d", *nrf);
+void _update_fps_counter(GLFWwindow* window) {
+	static double previous_seconds = glfwGetTime();
+	static int frame_count;
+	double current_seconds = glfwGetTime();
+	double elapsed_seconds = current_seconds - previous_seconds;
+	if (elapsed_seconds > 0.25) {
+		previous_seconds = current_seconds;
+		double fps = (double)frame_count / elapsed_seconds;
+		char tmp[128];
+		sprintf(tmp, "opengl @ fps: %.2f", fps);
 		glfwSetWindowTitle(window, tmp);
-		*nrf = 0;
-		*t1 += 1.0;
+		frame_count = 0;
 	}
-	
+	frame_count++;
 }
 
 // Flips texture
