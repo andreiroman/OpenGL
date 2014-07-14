@@ -29,16 +29,33 @@ public:
 	Sprite() {};
 	// ordinea de desenare: 0 1 2 2 3 0
 	Sprite(float x, float y, float sz) { // centrul de referinta pentru patrat si marimea
-		v[0] = -sz + x, v[1] = -sz + y, v[2] = 0.0f, v[3] = 0.0f, v[4] = 0.0f;		// stanga jos
-		v[5] = sz + x, v[6] = -sz + y, v[7] = 0.0f, v[8] = 1.0f, v[9] = 0.0f;		// dreapta jos
-		v[10] = sz + x, v[11] = sz + y, v[12] = 0.0f, v[13] = 1.0f, v[14] = 1.0f;	// dreapta sus
-		v[15] = -sz + x, v[16] = sz + y, v[17] = 0.0f, v[18] = 0.0f, v[19] = 1.0f;	// stanga sus
+		v[0] = -sz + x, v[1] = -sz + y, v[2] = 0.0f, v[3] = 1.0f, v[4] = 1.0f;		// stanga jos
+		v[5] = sz + x, v[6] = -sz + y, v[7] = 0.0f, v[8] = 0.0f, v[9] = 1.0f;		// dreapta jos
+		v[10] = sz + x, v[11] = sz + y, v[12] = 0.0f, v[13] = 0.0f, v[14] = 0.0f;	// dreapta sus
+		v[15] = -sz + x, v[16] = sz + y, v[17] = 0.0f, v[18] = 1.0f, v[19] = 0.0f;	// stanga sus
 	}
 	void up() {
 		v[1] += 0.0005, v[6] += 0.0005;
 		v[11] += 0.0005, v[16] += 0.0005;
 	}
+	void down() {
+		v[1] -= 0.0005, v[6] -= 0.0005;
+		v[11] -= 0.0005, v[16] -= 0.0005;
+	}
 	~Sprite() {}
+};
+
+class Player {
+public:
+	float v[20];
+	Player() {
+		v[0] = -0.75f, v[1] = -0.1f, v[2] = 0.0f, v[3] = 1.0f, v[4] = 1.0f;		// stanga jos
+		v[5] = -0.5f, v[6] = -0.1f, v[7] = 0.0f, v[8] = 0.0f, v[9] = 1.0f;		// dreapta jos
+		v[10] = -0.5f, v[11] = 0.1f, v[12] = 0.0f, v[13] = 0.0f, v[14] = 0.0f;	// dreapta sus
+		v[15] = -0.75f, v[16] = 0.1f, v[17] = 0.0f, v[18] = 1.0f, v[19] = 0.0f;	// stanga sus
+	}
+
+	~Player() {}
 };
 
 class SpriteManager {
@@ -55,9 +72,23 @@ public:
 	}
 
 	void allup() {
-		for (int i = 0; i < nrSprites; ) {
+		for (int i = 0; i < nrSprites;) {
 			sprites[i]->up();
 			if (sprites[i]->v[1] > 1) {
+				delete sprites[i];
+				sprites[i] = sprites[--nrSprites];
+				sprites[nrSprites] = NULL;
+			}
+			else {
+				++i;
+			}
+		}
+	}
+
+	void alldown() {
+		for (int i = 0; i < nrSprites;) {
+			sprites[i]->down();
+			if (sprites[i]->v[1] < 0) {
 				delete sprites[i];
 				sprites[i] = sprites[--nrSprites];
 				sprites[nrSprites] = NULL;
@@ -125,8 +156,8 @@ int main() {
 	printf("Renderer: %s\n", renderer);
 	printf("OpenGL version supported %s\n", version);
 
-	const char * vertex_shader = LoadFileInMemory("../data/vertexShader.glsl");
-	const char * fragment_shader = LoadFileInMemory("../data/fragmentShader.glsl");
+	const char * vertex_shader = LoadFileInMemory("../Data/vertexShader.glsl");
+	const char * fragment_shader = LoadFileInMemory("../Data/fragmentShader.glsl");
 
 	GLuint vs = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vs, 1, &vertex_shader, NULL);
@@ -145,7 +176,7 @@ int main() {
 	// incarcam imaginea din fisier si ii fortam canalele RGBA
 	int x, y, n;
 	int force_channels = 4;
-	unsigned char* image_data = stbi_load("1.png", &x, &y, &n, force_channels);
+	unsigned char* image_data = stbi_load("../Data/Sprites/player0000.png", &x, &y, &n, force_channels);
 	FlipTexture(image_data, x, y, n); //flip
 
 	// Trimitem textura la memoria video
@@ -181,15 +212,14 @@ int main() {
 		if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
 			second_press_time = glfwGetTime();
 			if (second_press_time - first_press_time > 0.15f) {
-				float obj_size = (float)(rand() % 100 + 30) / 500;
+				float obj_size = (float)(rand() % 70 + 30) / 500;
 				s->addSprite(new Sprite(
-					(float)(rand() % 200 - 100) / 100, -1.0f - (obj_size / 2), obj_size));
+					(float)(rand() % 200 - 100) / 100, 1.0f + (obj_size / 2), obj_size));
 				first_press_time = second_press_time;
 			}
 		}
 
-		s->allup();
-		printf("%d\n", s->nrSprites);
+		s->alldown();
 		int nrE = s->nrSprites;
 		float * vertex_buffer = new float[nrE * 20];
 		for (int i = 0; i < nrE; i++)

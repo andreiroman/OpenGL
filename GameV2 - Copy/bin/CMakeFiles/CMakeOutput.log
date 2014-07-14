@@ -1,0 +1,249 @@
+The system is: Windows - 6.2 - AMD64
+Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+Compiler:  
+Build flags: 
+Id flags: 
+
+The output was:
+0
+Microsoft (R) Build Engine version 12.0.30501.0
+[Microsoft .NET Framework, version 4.0.30319.34014]
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 7/8/2014 11:48:39 PM.
+Project "C:\Users\Andrei\Desktop\General\GameV2\bin\CMakeFiles\3.0.0\CompilerIdC\CompilerIdC.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "Debug\".
+  Creating directory "Debug\CompilerIdC.tlog\".
+InitializeBuildStatus:
+  Creating "Debug\CompilerIdC.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /nologo /W0 /WX- /Od /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TC /errorReport:queue CMakeCCompilerId.c
+  CMakeCCompilerId.c
+Link:
+  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:QUEUE /OUT:".\CompilerIdC.exe" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:".\CompilerIdC.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:".\CompilerIdC.lib" /MACHINE:X64 Debug\CMakeCCompilerId.obj
+  CompilerIdC.vcxproj -> C:\Users\Andrei\Desktop\General\GameV2\bin\CMakeFiles\3.0.0\CompilerIdC\.\CompilerIdC.exe
+PostBuildEvent:
+  for %%i in (cl.exe) do @echo CMAKE_C_COMPILER=%%~$PATH:i
+  :VCEnd
+  CMAKE_C_COMPILER=C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\cl.exe
+FinalizeBuildStatus:
+  Deleting file "Debug\CompilerIdC.tlog\unsuccessfulbuild".
+  Touching "Debug\CompilerIdC.tlog\CompilerIdC.lastbuildstate".
+Done Building Project "C:\Users\Andrei\Desktop\General\GameV2\bin\CMakeFiles\3.0.0\CompilerIdC\CompilerIdC.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:02.29
+
+
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CompilerIdC.exe"
+
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CompilerIdC.vcxproj"
+
+The C compiler identification is MSVC, found in "C:/Users/Andrei/Desktop/General/GameV2/bin/CMakeFiles/3.0.0/CompilerIdC/CompilerIdC.exe"
+
+Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+Compiler:  
+Build flags: 
+Id flags: 
+
+The output was:
+0
+Microsoft (R) Build Engine version 12.0.30501.0
+[Microsoft .NET Framework, version 4.0.30319.34014]
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 7/8/2014 11:48:41 PM.
+Project "C:\Users\Andrei\Desktop\General\GameV2\bin\CMakeFiles\3.0.0\CompilerIdCXX\CompilerIdCXX.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "Debug\".
+  Creating directory "Debug\CompilerIdCXX.tlog\".
+InitializeBuildStatus:
+  Creating "Debug\CompilerIdCXX.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /nologo /W0 /WX- /Od /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /errorReport:queue CMakeCXXCompilerId.cpp
+  CMakeCXXCompilerId.cpp
+Link:
+  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:QUEUE /OUT:".\CompilerIdCXX.exe" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:".\CompilerIdCXX.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:".\CompilerIdCXX.lib" /MACHINE:X64 Debug\CMakeCXXCompilerId.obj
+  CompilerIdCXX.vcxproj -> C:\Users\Andrei\Desktop\General\GameV2\bin\CMakeFiles\3.0.0\CompilerIdCXX\.\CompilerIdCXX.exe
+PostBuildEvent:
+  for %%i in (cl.exe) do @echo CMAKE_CXX_COMPILER=%%~$PATH:i
+  :VCEnd
+  CMAKE_CXX_COMPILER=C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\cl.exe
+FinalizeBuildStatus:
+  Deleting file "Debug\CompilerIdCXX.tlog\unsuccessfulbuild".
+  Touching "Debug\CompilerIdCXX.tlog\CompilerIdCXX.lastbuildstate".
+Done Building Project "C:\Users\Andrei\Desktop\General\GameV2\bin\CMakeFiles\3.0.0\CompilerIdCXX\CompilerIdCXX.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.35
+
+
+Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CompilerIdCXX.exe"
+
+Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CompilerIdCXX.vcxproj"
+
+The CXX compiler identification is MSVC, found in "C:/Users/Andrei/Desktop/General/GameV2/bin/CMakeFiles/3.0.0/CompilerIdCXX/CompilerIdCXX.exe"
+
+Determining if the C compiler works passed with the following output:
+Change Dir: C:/Users/Andrei/Desktop/General/GameV2/bin/CMakeFiles/CMakeTmp
+
+Run Build Command:"C:/Program Files (x86)/MSBuild/12.0/bin/MSBuild.exe" "cmTryCompileExec3148692456.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=12.0"
+Microsoft (R) Build Engine version 12.0.30501.0
+[Microsoft .NET Framework, version 4.0.30319.34014]
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 7/8/2014 11:48:42 PM.
+Project "C:\Users\Andrei\Desktop\General\GameV2\bin\CMakeFiles\CMakeTmp\cmTryCompileExec3148692456.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTryCompileExec3148692456.dir\Debug\".
+  Creating directory "C:\Users\Andrei\Desktop\General\GameV2\bin\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTryCompileExec3148692456.dir\Debug\cmTryCom.872396B2.tlog\".
+InitializeBuildStatus:
+  Creating "cmTryCompileExec3148692456.dir\Debug\cmTryCom.872396B2.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /W3 /WX- /Od /Ob0 /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"cmTryCompileExec3148692456.dir\Debug\\" /Fd"cmTryCompileExec3148692456.dir\Debug\vc120.pdb" /Gd /TC /errorReport:queue testCCompiler.c
+  Microsoft (R) C/C++ Optimizing Compiler Version 18.00.30501 for x64
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /Od /Ob0 /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"cmTryCompileExec3148692456.dir\Debug\\" /Fd"cmTryCompileExec3148692456.dir\Debug\vc120.pdb" /Gd /TC /errorReport:queue testCCompiler.c
+  
+  testCCompiler.c
+Link:
+  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:QUEUE /OUT:"C:\Users\Andrei\Desktop\General\GameV2\bin\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec3148692456.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/Andrei/Desktop/General/GameV2/bin/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec3148692456.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/Andrei/Desktop/General/GameV2/bin/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec3148692456.lib" /MACHINE:X64  /machine:x64 /debug cmTryCompileExec3148692456.dir\Debug\testCCompiler.obj
+  cmTryCompileExec3148692456.vcxproj -> C:\Users\Andrei\Desktop\General\GameV2\bin\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec3148692456.exe
+FinalizeBuildStatus:
+  Deleting file "cmTryCompileExec3148692456.dir\Debug\cmTryCom.872396B2.tlog\unsuccessfulbuild".
+  Touching "cmTryCompileExec3148692456.dir\Debug\cmTryCom.872396B2.tlog\cmTryCompileExec3148692456.lastbuildstate".
+Done Building Project "C:\Users\Andrei\Desktop\General\GameV2\bin\CMakeFiles\CMakeTmp\cmTryCompileExec3148692456.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.75
+
+
+Detecting C compiler ABI info compiled with the following output:
+Change Dir: C:/Users/Andrei/Desktop/General/GameV2/bin/CMakeFiles/CMakeTmp
+
+Run Build Command:"C:/Program Files (x86)/MSBuild/12.0/bin/MSBuild.exe" "cmTryCompileExec92660780.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=12.0"
+Microsoft (R) Build Engine version 12.0.30501.0
+[Microsoft .NET Framework, version 4.0.30319.34014]
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 7/8/2014 11:48:43 PM.
+Project "C:\Users\Andrei\Desktop\General\GameV2\bin\CMakeFiles\CMakeTmp\cmTryCompileExec92660780.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTryCompileExec92660780.dir\Debug\".
+  Creating directory "C:\Users\Andrei\Desktop\General\GameV2\bin\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTryCompileExec92660780.dir\Debug\cmTryCom.DCD3F493.tlog\".
+InitializeBuildStatus:
+  Creating "cmTryCompileExec92660780.dir\Debug\cmTryCom.DCD3F493.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /W3 /WX- /Od /Ob0 /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"cmTryCompileExec92660780.dir\Debug\\" /Fd"cmTryCompileExec92660780.dir\Debug\vc120.pdb" /Gd /TC /errorReport:queue "C:\Program Files (x86)\CMake\share\cmake-3.0\Modules\CMakeCCompilerABI.c"
+  Microsoft (R) C/C++ Optimizing Compiler Version 18.00.30501 for x64
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /Od /Ob0 /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"cmTryCompileExec92660780.dir\Debug\\" /Fd"cmTryCompileExec92660780.dir\Debug\vc120.pdb" /Gd /TC /errorReport:queue "C:\Program Files (x86)\CMake\share\cmake-3.0\Modules\CMakeCCompilerABI.c"
+  
+  CMakeCCompilerABI.c
+Link:
+  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:QUEUE /OUT:"C:\Users\Andrei\Desktop\General\GameV2\bin\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec92660780.exe" /INCREMENTAL /NOLOGO /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/Andrei/Desktop/General/GameV2/bin/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec92660780.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/Andrei/Desktop/General/GameV2/bin/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec92660780.lib" /MACHINE:X64  /machine:x64 /debug cmTryCompileExec92660780.dir\Debug\CMakeCCompilerABI.obj
+  cmTryCompileExec92660780.vcxproj -> C:\Users\Andrei\Desktop\General\GameV2\bin\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec92660780.exe
+FinalizeBuildStatus:
+  Deleting file "cmTryCompileExec92660780.dir\Debug\cmTryCom.DCD3F493.tlog\unsuccessfulbuild".
+  Touching "cmTryCompileExec92660780.dir\Debug\cmTryCom.DCD3F493.tlog\cmTryCompileExec92660780.lastbuildstate".
+Done Building Project "C:\Users\Andrei\Desktop\General\GameV2\bin\CMakeFiles\CMakeTmp\cmTryCompileExec92660780.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.39
+
+
+Determining if the CXX compiler works passed with the following output:
+Change Dir: C:/Users/Andrei/Desktop/General/GameV2/bin/CMakeFiles/CMakeTmp
+
+Run Build Command:"C:/Program Files (x86)/MSBuild/12.0/bin/MSBuild.exe" "cmTryCompileExec2613777755.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=12.0"
+Microsoft (R) Build Engine version 12.0.30501.0
+[Microsoft .NET Framework, version 4.0.30319.34014]
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 7/8/2014 11:48:43 PM.
+Project "C:\Users\Andrei\Desktop\General\GameV2\bin\CMakeFiles\CMakeTmp\cmTryCompileExec2613777755.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTryCompileExec2613777755.dir\Debug\".
+  Creating directory "C:\Users\Andrei\Desktop\General\GameV2\bin\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTryCompileExec2613777755.dir\Debug\cmTryCom.627BCD58.tlog\".
+InitializeBuildStatus:
+  Creating "cmTryCompileExec2613777755.dir\Debug\cmTryCom.627BCD58.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /W3 /WX- /Od /Ob0 /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /GR /Fo"cmTryCompileExec2613777755.dir\Debug\\" /Fd"cmTryCompileExec2613777755.dir\Debug\vc120.pdb" /Gd /TP /errorReport:queue testCXXCompiler.cxx
+  Microsoft (R) C/C++ Optimizing Compiler Version 18.00.30501 for x64
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /Od /Ob0 /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /GR /Fo"cmTryCompileExec2613777755.dir\Debug\\" /Fd"cmTryCompileExec2613777755.dir\Debug\vc120.pdb" /Gd /TP /errorReport:queue testCXXCompiler.cxx
+  
+  testCXXCompiler.cxx
+Link:
+  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:QUEUE /OUT:"C:\Users\Andrei\Desktop\General\GameV2\bin\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec2613777755.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/Andrei/Desktop/General/GameV2/bin/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec2613777755.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/Andrei/Desktop/General/GameV2/bin/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec2613777755.lib" /MACHINE:X64  /machine:x64 /debug cmTryCompileExec2613777755.dir\Debug\testCXXCompiler.obj
+  cmTryCompileExec2613777755.vcxproj -> C:\Users\Andrei\Desktop\General\GameV2\bin\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec2613777755.exe
+FinalizeBuildStatus:
+  Deleting file "cmTryCompileExec2613777755.dir\Debug\cmTryCom.627BCD58.tlog\unsuccessfulbuild".
+  Touching "cmTryCompileExec2613777755.dir\Debug\cmTryCom.627BCD58.tlog\cmTryCompileExec2613777755.lastbuildstate".
+Done Building Project "C:\Users\Andrei\Desktop\General\GameV2\bin\CMakeFiles\CMakeTmp\cmTryCompileExec2613777755.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.47
+
+
+Detecting CXX compiler ABI info compiled with the following output:
+Change Dir: C:/Users/Andrei/Desktop/General/GameV2/bin/CMakeFiles/CMakeTmp
+
+Run Build Command:"C:/Program Files (x86)/MSBuild/12.0/bin/MSBuild.exe" "cmTryCompileExec3170468440.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=12.0"
+Microsoft (R) Build Engine version 12.0.30501.0
+[Microsoft .NET Framework, version 4.0.30319.34014]
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 7/8/2014 11:48:44 PM.
+Project "C:\Users\Andrei\Desktop\General\GameV2\bin\CMakeFiles\CMakeTmp\cmTryCompileExec3170468440.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTryCompileExec3170468440.dir\Debug\".
+  Creating directory "C:\Users\Andrei\Desktop\General\GameV2\bin\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTryCompileExec3170468440.dir\Debug\cmTryCom.EB08FC81.tlog\".
+InitializeBuildStatus:
+  Creating "cmTryCompileExec3170468440.dir\Debug\cmTryCom.EB08FC81.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /W3 /WX- /Od /Ob0 /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /GR /Fo"cmTryCompileExec3170468440.dir\Debug\\" /Fd"cmTryCompileExec3170468440.dir\Debug\vc120.pdb" /Gd /TP /errorReport:queue "C:\Program Files (x86)\CMake\share\cmake-3.0\Modules\CMakeCXXCompilerABI.cpp"
+  Microsoft (R) C/C++ Optimizing Compiler Version 18.00.30501 for x64
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /Od /Ob0 /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /GR /Fo"cmTryCompileExec3170468440.dir\Debug\\" /Fd"cmTryCompileExec3170468440.dir\Debug\vc120.pdb" /Gd /TP /errorReport:queue "C:\Program Files (x86)\CMake\share\cmake-3.0\Modules\CMakeCXXCompilerABI.cpp"
+  
+  CMakeCXXCompilerABI.cpp
+Link:
+  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:QUEUE /OUT:"C:\Users\Andrei\Desktop\General\GameV2\bin\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec3170468440.exe" /INCREMENTAL /NOLOGO /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/Andrei/Desktop/General/GameV2/bin/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec3170468440.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/Andrei/Desktop/General/GameV2/bin/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec3170468440.lib" /MACHINE:X64  /machine:x64 /debug cmTryCompileExec3170468440.dir\Debug\CMakeCXXCompilerABI.obj
+  cmTryCompileExec3170468440.vcxproj -> C:\Users\Andrei\Desktop\General\GameV2\bin\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec3170468440.exe
+FinalizeBuildStatus:
+  Deleting file "cmTryCompileExec3170468440.dir\Debug\cmTryCom.EB08FC81.tlog\unsuccessfulbuild".
+  Touching "cmTryCompileExec3170468440.dir\Debug\cmTryCom.EB08FC81.tlog\cmTryCompileExec3170468440.lastbuildstate".
+Done Building Project "C:\Users\Andrei\Desktop\General\GameV2\bin\CMakeFiles\CMakeTmp\cmTryCompileExec3170468440.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.42
+
+
