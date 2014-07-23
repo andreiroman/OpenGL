@@ -18,7 +18,6 @@
 using namespace std;
 
 char * LoadFileInMemory(const char *filename); // load file to buffer
-void FlipTexture(unsigned char* image_data, int x, int y, int n); // flip image
 void _update_fps_counter(GLFWwindow* window);
 
 // patrat, 4 noduri
@@ -83,15 +82,16 @@ public:
 
 class Player {
 public:
-	float mw, mh;
+	float mw, mh, speed;
 	float v[20];
 	Player() {
-		v[0] = -0.25f, v[1] = -0.25f, v[2] = 0.0f, v[3] = 0.0f, v[4] = 0.0f;		// stanga jos
-		v[5] = 0.25f, v[6] = -0.25f, v[7] = 0.0f, v[8] = 1.0f, v[9] = 0.0f;		// dreapta jos
-		v[10] = 0.25f, v[11] = 0.25f, v[12] = 0.0f, v[13] = 1.0f, v[14] = 1.0f;	// dreapta sus
-		v[15] = -0.25f, v[16] = 0.25f, v[17] = 0.0f, v[18] = 0.0f, v[19] = 1.0f;	// stanga sus
-		mh = 512;
-		mw = 1024;
+		v[0] = -0.25f,	v[1] = -0.25f,	v[2] = 0.0f,	v[3] = 0.0f,	v[4] = 0.0f;	// stanga jos
+		v[5] = 0.25f,	v[6] = -0.25f,	v[7] = 0.0f,	v[8] = 1.0f,	v[9] = 0.0f;	// dreapta jos
+		v[10] = 0.25f,	v[11] = 0.25f,	v[12] = 0.0f,	v[13] = 1.0f,	v[14] = 1.0f;	// dreapta sus
+		v[15] = -0.25f,	v[16] = 0.25f,	v[17] = 0.0f,	v[18] = 0.0f,	v[19] = 1.0f;	// stanga sus
+		mh = 512; // texture height
+		mw = 1024; // texture width
+		speed = 0.01;
 	}
 
 	void changeVectors(Loaded_Texture *t) {
@@ -104,7 +104,38 @@ public:
 			v[3], v[4], v[8], v[9], v[13], v[14], v[18], v[19]);
 	}
 
-
+	void moveup() {
+		if (v[11] < 1) {
+			v[1] += 0.0001f;
+			v[6] += 0.0001f;
+			v[11] += 0.0001f;
+			v[16] += 0.0001f;
+		}
+	}
+	void movedown() {
+		if (v[1] > -1) {
+			v[1] -= 0.0001f;
+			v[6] -= 0.0001f;
+			v[11] -= 0.0001f;
+			v[16] -= 0.0001f;
+		}
+	}
+	void moveleft() {
+		if (v[0] > -1) {
+			v[0] -= 0.0001f;
+			v[5] -= 0.0001f;
+			v[10] -= 0.0001f;
+			v[15] -= 0.0001f;
+		}
+	}
+	void moveright() {
+		if (v[10] < 1) {
+			v[0] += 0.0001f;
+			v[5] += 0.0001f;
+			v[10] += 0.0001f;
+			v[15] += 0.0001f;
+		}
+	}
 
 	~Player() {}
 };
@@ -233,7 +264,6 @@ int main() {
 	int x, y, n;
 	int force_channels = 4;
 	unsigned char* image_data = stbi_load("../AnimatiiExemplu/player.png", &x, &y, &n, force_channels);
-//	FlipTexture(image_data, x, y, n); //flip
 
 	// Trimitem textura la memoria video
 	GLuint tex = 0;
@@ -314,6 +344,7 @@ int main() {
 			state = 0;
 		}
 		if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_D)) {
+			player->moveright();
 			idle_time = 0;
 			if (state != 1) {
 				state = 1;
@@ -321,6 +352,7 @@ int main() {
 			}
 		}
 		if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_A)) {
+			player->moveleft();
 			idle_time = 0;
 			if (state != 2) {
 				state = 2;
@@ -328,10 +360,10 @@ int main() {
 			}
 		}
 		if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_W)) {
-
+			player->moveup();
 		}
 		if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_S)) {
-			
+			player->movedown();
 		}
 		if (glfwGetTime() - animation_time > 0.05) {
 			idle_time += 0.1;
@@ -428,29 +460,6 @@ void _update_fps_counter(GLFWwindow* window) {
 		frame_count = 0;
 	}
 	frame_count++;
-}
-
-// Flips texture
-void FlipTexture(unsigned char* image_data, int x, int y, int n)
-{
-	//flip texture
-	int width_in_bytes = x * 4;
-	unsigned char *top = NULL;
-	unsigned char *bottom = NULL;
-	unsigned char temp = 0;
-	int half_height = y / 2;
-
-	for (int row = 0; row < half_height; row++) {
-		top = image_data + row * width_in_bytes;
-		bottom = image_data + (y - row - 1) * width_in_bytes;
-		for (int col = 0; col < width_in_bytes; col++) {
-			temp = *top;
-			*top = *bottom;
-			*bottom = temp;
-			top++;
-			bottom++;
-		}
-	}
 }
 
 // load file in a buffer

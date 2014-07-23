@@ -1,4 +1,4 @@
-﻿Build started 6/29/2014 10:09:47 PM.
+﻿Build started 7/15/2014 9:11:30 PM.
      1>Project "C:\Users\Andrei\Desktop\General\Circle - colored\openGL_game\openGL_game.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\Users\Andrei\Desktop\General\Circle - colored\\include\\" /AI"C:\Users\Andrei\Desktop\General\Circle - colored\\bin\\" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Source.cpp
@@ -10,9 +10,10 @@
      1>c:\users\andrei\desktop\general\circle - colored\opengl_game\source.cpp(83): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Andrei\Desktop\General\Circle - colored\Debug\openGL_game.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Users\Andrei\Desktop\General\Circle - colored\\lib\\" glew32.lib glfw3.lib glfw3dll.lib OpenGL32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Andrei\Desktop\General\Circle - colored\Debug\openGL_game.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Andrei\Desktop\General\Circle - colored\Debug\openGL_game.lib" /MACHINE:X86 Debug\Source.obj
+     1>LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
          openGL_game.vcxproj -> C:\Users\Andrei\Desktop\General\Circle - colored\Debug\openGL_game.exe
      1>Done Building Project "C:\Users\Andrei\Desktop\General\Circle - colored\openGL_game\openGL_game.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.32
+Time Elapsed 00:00:09.30

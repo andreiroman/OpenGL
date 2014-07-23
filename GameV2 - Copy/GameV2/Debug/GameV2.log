@@ -1,17 +1,18 @@
-﻿Build started 7/14/2014 3:00:31 PM.
+﻿Build started 7/16/2014 4:31:48 AM.
      1>Project "C:\Users\Andrei\Desktop\General\GameV2 - Copy\GameV2\GameV2.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\Users\Andrei\Desktop\General\GameV2 - Copy\\include" /I"C:\Users\Andrei\Desktop\General\GameV2 - Copy\\glm\glm" /I"C:\Users\Andrei\Desktop\General\GameV2 - Copy\\glm\glm\gtc" /I"C:\Users\Andrei\Desktop\General\GameV2 - Copy\\rapidxml\\" /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Source.cpp
          Source.cpp
+     1>c:\users\andrei\desktop\general\gamev2 - copy\gamev2\source.cpp(37): warning C4305: '+=' : truncation from 'double' to 'float'
      1>c:\users\andrei\desktop\general\gamev2 - copy\gamev2\source.cpp(38): warning C4305: '+=' : truncation from 'double' to 'float'
-     1>c:\users\andrei\desktop\general\gamev2 - copy\gamev2\source.cpp(39): warning C4305: '+=' : truncation from 'double' to 'float'
+     1>c:\users\andrei\desktop\general\gamev2 - copy\gamev2\source.cpp(41): warning C4305: '-=' : truncation from 'double' to 'float'
      1>c:\users\andrei\desktop\general\gamev2 - copy\gamev2\source.cpp(42): warning C4305: '-=' : truncation from 'double' to 'float'
-     1>c:\users\andrei\desktop\general\gamev2 - copy\gamev2\source.cpp(43): warning C4305: '-=' : truncation from 'double' to 'float'
-     1>c:\users\andrei\desktop\general\gamev2 - copy\gamev2\source.cpp(261): warning C4244: 'argument' : conversion from 'time_t' to 'unsigned int', possible loss of data
-     1>c:\users\andrei\desktop\general\gamev2 - copy\gamev2\source.cpp(301): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\andrei\desktop\general\gamev2 - copy\gamev2\source.cpp(337): warning C4305: '+=' : truncation from 'double' to 'float'
-     1>c:\users\andrei\desktop\general\gamev2 - copy\gamev2\source.cpp(338): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\andrei\desktop\general\gamev2 - copy\gamev2\source.cpp(259): warning C4101: 'second_press_time' : unreferenced local variable
+     1>c:\users\andrei\desktop\general\gamev2 - copy\gamev2\source.cpp(94): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\andrei\desktop\general\gamev2 - copy\gamev2\source.cpp(291): warning C4244: 'argument' : conversion from 'time_t' to 'unsigned int', possible loss of data
+     1>c:\users\andrei\desktop\general\gamev2 - copy\gamev2\source.cpp(331): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\andrei\desktop\general\gamev2 - copy\gamev2\source.cpp(369): warning C4305: '+=' : truncation from 'double' to 'float'
+     1>c:\users\andrei\desktop\general\gamev2 - copy\gamev2\source.cpp(370): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\andrei\desktop\general\gamev2 - copy\gamev2\source.cpp(289): warning C4101: 'second_press_time' : unreferenced local variable
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Andrei\Desktop\General\GameV2 - Copy\Debug\GameV2.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Users\Andrei\Desktop\General\GameV2 - Copy\\lib" glew32.lib glfw3dll.lib opengl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Andrei\Desktop\General\GameV2 - Copy\Debug\GameV2.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Andrei\Desktop\General\GameV2 - Copy\Debug\GameV2.lib" /MACHINE:X86 Debug\Source.obj
          GameV2.vcxproj -> C:\Users\Andrei\Desktop\General\GameV2 - Copy\Debug\GameV2.exe
@@ -19,4 +20,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.90
+Time Elapsed 00:00:05.43
