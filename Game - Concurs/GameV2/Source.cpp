@@ -36,7 +36,7 @@ public:
 		v[10] = sz + x, v[11] = sz + y, v[12] = 0.0f, v[13] = 0.0f, v[14] = 0.0f;	// dreapta sus
 		v[15] = -sz + x, v[16] = sz + y, v[17] = 0.0f, v[18] = 1.0f, v[19] = 0.0f;	// stanga sus
 		direction = 0;
-		spriteColor();
+//		spriteColor();
 	}
 
 	void spriteColor() {
@@ -93,7 +93,7 @@ public:
 	}
 
 	void addSprite() {
-		float obj_size = 0.0005;
+		float obj_size = 0.005;
 		sprites[nrSprites] = new Sprite((rand() % 2002 - 1000) * (2 - 2 * obj_size) / 2000,
 			(rand() % 2002 - 1000) * (2 - 2 * obj_size) / 2000, obj_size);
 		memcpy(vertex_buffer + 20 * nrSprites, sprites[nrSprites]->v, 20 * sizeof(float));
@@ -196,7 +196,7 @@ int main() {
 	// incarcam imaginea din fisier si ii fortam canalele RGBA
 	int x, y, n;
 	int force_channels = 4;
-	unsigned char* image_data = stbi_load("../Data/Sprites/RBG.png", &x, &y, &n, force_channels);
+	unsigned char* image_data = stbi_load("../Data/Sprites/epicness.png", &x, &y, &n, force_channels);
 
 	// Trimitem textura la memoria video
 	GLuint tex = 0;
@@ -221,9 +221,10 @@ int main() {
 	int flag = 1, stabil = 0;
 	float t1, stab_time = glfwGetTime();
 
+	float time1 = glfwGetTime();
+
 	while (!glfwWindowShouldClose(window)) {
 		//..... Randare................. 
-		float time1 = glfwGetTime();
 		// FPS counter
 		_update_fps_counter(window, s->nrSprites);
 		//----------
@@ -251,30 +252,24 @@ int main() {
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, tex);
 		glUniform1i(tex_loc, 0); // use active texture 0
+		// timing 60 fps
 		float time2 = glfwGetTime();
-		// timing 60 fps		
+
 		s->Update(flag);
-		// sleep
-		t1 = glfwGetTime() - time2 + time1;
 		s->Draw();
-		glDeleteBuffers(1, &vbo);
 
-		// facem swap la buffere (Double buffer)
-		glfwSwapBuffers(window);
-
-		glfwPollEvents();
-		if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_ESCAPE)) {
-			glfwSetWindowShouldClose(window, 1);
-		}if (glfwGetTime() - stab_time > 10) {
+		t1 = glfwGetTime() - time2 + time1;
+		if (glfwGetTime() - stab_time > 10) {
 			stabil = 1;
 		}
+
 		if (!stabil) {
-			if (glfwGetTime() - t1 > 0.009) {
+			if (glfwGetTime() - t1 >= 0.007) {
 				flag = 0;
 			}
 			else {
 				flag = 1;
-				while (glfwGetTime() - t1 < 0.016);
+				while (glfwGetTime() - t1 <= 0.007);
 			}
 		}
 		else {
@@ -285,6 +280,17 @@ int main() {
 			if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
 				s->deleteSprite();
 			}
+		}
+		time1 = glfwGetTime();
+
+		glDeleteBuffers(1, &vbo);
+
+		// facem swap la buffere (Double buffer)
+		glfwSwapBuffers(window);
+
+		glfwPollEvents();
+		if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_ESCAPE)) {
+			glfwSetWindowShouldClose(window, 1);
 		}
 	}
 
