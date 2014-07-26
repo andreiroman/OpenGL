@@ -18,11 +18,12 @@
 using namespace std;
 
 char * LoadFileInMemory(const char *filename); // load file to buffer
-void _update_fps_counter(GLFWwindow* window, int nrp);
+void _update_fps_counter(GLFWwindow* window, int nrp, float stab_time);
 
-static unsigned int next_color = 0;
-const float step = 1.0f / 4096;
 const int NMAX = 1000000;
+const float obj_size = 0.005;
+const int sprite_frame_update = 1000;
+
 // patrat, 4 noduri
 class Sprite {
 public:
@@ -31,41 +32,35 @@ public:
 	Sprite() {};
 	// ordinea de desenare: 0 1 2 2 3 0
 	Sprite(float x, float y, float sz) { // centrul de referinta pentru patrat si marimea
-		v[0] = -sz + x, v[1] = -sz + y, v[2] = 0.0f, v[3] = 1.0f, v[4] = 1.0f;		// stanga jos
-		v[5] = sz + x, v[6] = -sz + y, v[7] = 0.0f, v[8] = 0.0f, v[9] = 1.0f;		// dreapta jos
-		v[10] = sz + x, v[11] = sz + y, v[12] = 0.0f, v[13] = 0.0f, v[14] = 0.0f;	// dreapta sus
-		v[15] = -sz + x, v[16] = sz + y, v[17] = 0.0f, v[18] = 1.0f, v[19] = 0.0f;	// stanga sus
+		v[0] = -sz + x, v[1] = -sz + y, v[2] = 0.0f, v[3] = 0.0f, v[4] = 1.0f;		// stanga jos
+		v[5] = sz + x, v[6] = -sz + y, v[7] = 0.0f, v[8] = 1.0f, v[9] = 1.0f;		// dreapta jos
+		v[10] = sz + x, v[11] = sz + y, v[12] = 0.0f, v[13] = 1.0f, v[14] = 0.0f;	// dreapta sus
+		v[15] = -sz + x, v[16] = sz + y, v[17] = 0.0f, v[18] = 0.0f, v[19] = 0.0f;	// stanga sus
 		direction = 0;
-//		spriteColor();
-	}
-
-	void spriteColor() {
-		// uniform
-//		float row = (float)(next_color / 4096) / 4096;
-//		float col = (float)(next_color % 4096) / 4096;
-		// random
-		float row = (float)(rand() % 4096) / 4096;
-		float col = (float)(rand() % 4096) / 4096;
-		v[3] = col + step, v[4] = row + step;	// stanga jos
-		v[8] = col, v[9] = row + step;	// dreapta jos
-		v[13] = col, v[14] = row;	// dreapta sus
-		v[18] = col + step, v[19] = row;	// stanga sus
-		++next_color;
-		if (next_color > 4096 * 4096) next_color = 0;
 	}
 
 	void move() {
 		if (direction == 0) {// dreapta
 			v[0] += 0.005, v[5] += 0.005;
 			v[10] += 0.005, v[15] += 0.005;
-			if (v[5] >= 1)
+			if (v[5] >= 1) {
 				direction = 1;
+				v[3] = 1.0f;
+				v[8] = 0.0f;
+				v[13] = 0.0f;
+				v[18] = 1.0f;
+			}
 		}
 		else {// stanga
 			v[0] -= 0.005, v[5] -= 0.005;
 			v[10] -= 0.005, v[15] -= 0.005;
-			if (v[0] <= -1)
+			if (v[0] <= -1) {
 				direction = 0;
+				v[3] = 0.0f;
+				v[8] = 1.0f;
+				v[13] = 1.0f;
+				v[18] = 0.0f;
+			}
 		}
 	}
 	~Sprite() {}
@@ -93,7 +88,6 @@ public:
 	}
 
 	void addSprite() {
-		float obj_size = 0.005;
 		sprites[nrSprites] = new Sprite((rand() % 2002 - 1000) * (2 - 2 * obj_size) / 2000,
 			(rand() % 2002 - 1000) * (2 - 2 * obj_size) / 2000, obj_size);
 		memcpy(vertex_buffer + 20 * nrSprites, sprites[nrSprites]->v, 20 * sizeof(float));
@@ -114,14 +108,13 @@ public:
 
 	void Update(int flag) {
 		move();
-		int nr_obj = 1000;
-		if (flag == 1) { // adaug nr_obj
-			for (int i = 0; i < nr_obj; i++) {
+		if (flag == 1) { // adaug sprite-uri
+			for (int i = 0; i < sprite_frame_update; i++) {
 				addSprite();
 			}
 		}
-		if (flag == 0) {// sterg nr_obj
-			for (int i = 0; i < nr_obj; i++) {
+		if (flag == 0) {// sterg sprite-uri
+			for (int i = 0; i < sprite_frame_update; i++) {
 				if (nrSprites > 0) {
 					deleteSprite();
 				}
@@ -219,14 +212,13 @@ int main() {
 	srand(time(NULL));
 	SpriteManager *s = new SpriteManager();
 	int flag = 1, stabil = 0;
-	float t1, stab_time = glfwGetTime();
-
-	float time1 = glfwGetTime();
+	float stab_time = glfwGetTime(), press_clock = 0;
 
 	while (!glfwWindowShouldClose(window)) {
 		//..... Randare................. 
+		float clock1 = glfwGetTime();
 		// FPS counter
-		_update_fps_counter(window, s->nrSprites);
+		_update_fps_counter(window, s->nrSprites, stab_time);
 		//----------
 
 		// Generam un buffer in memoria video si scriem in el punctele din ram
@@ -256,32 +248,35 @@ int main() {
 		float time2 = glfwGetTime();
 
 		s->Update(flag);
+
 		s->Draw();
 
-		t1 = glfwGetTime() - time2 + time1;
 		if (glfwGetTime() - stab_time > 10) {
 			stabil = 1;
 		}
 
 		if (!stabil) {
-			if (glfwGetTime() - t1 >= 0.007) {
+			if (glfwGetTime() - clock1 >= 0.016) {
 				flag = 0;
 			}
 			else {
 				flag = 1;
-				while (glfwGetTime() - t1 <= 0.007);
+				while (glfwGetTime() - clock1 <= 0.016);
 			}
 		}
 		else {
 			flag = 2;
-			if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+			if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS
+				&& glfwGetTime() - press_clock > 0.1) {
+				press_clock = glfwGetTime();
 				s->addSprite();
 			}
-			if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+			if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS
+				&& glfwGetTime() - press_clock > 0.1) {
+				press_clock = glfwGetTime();
 				s->deleteSprite();
 			}
 		}
-		time1 = glfwGetTime();
 
 		glDeleteBuffers(1, &vbo);
 
@@ -313,7 +308,7 @@ int main() {
 }
 
 // fps_counter
-void _update_fps_counter(GLFWwindow* window, int nrp) {
+void _update_fps_counter(GLFWwindow* window, int nrp, float stab_time) {
 	static double previous_seconds = glfwGetTime();
 	static int frame_count;
 	double current_seconds = glfwGetTime();
@@ -322,7 +317,12 @@ void _update_fps_counter(GLFWwindow* window, int nrp) {
 		previous_seconds = current_seconds;
 		double fps = (double)frame_count / elapsed_seconds;
 		char tmp[128];
-		sprintf(tmp, "fps: %.2f, particles: %d", fps, nrp);
+		if (glfwGetTime() - stab_time < 9) {
+			sprintf(tmp, "fps: %.2f, particles: %d, wait %f sec", fps, nrp, 10 - glfwGetTime() - stab_time);
+		}
+		else {
+			sprintf(tmp, "fps: %.2f, particles: %d, stable", fps, nrp);
+		}
 		glfwSetWindowTitle(window, tmp);
 		frame_count = 0;
 	}
