@@ -15,19 +15,22 @@
 #include <stdio.h>
 #include <vector>
 #include <time.h>
+// audio
+#include <Windows.h>
+#include <mmsystem.h>
 using namespace std;
 
 char * LoadFileInMemory(const char *filename); // load file to buffer
 void _update_fps_counter(GLFWwindow* window);
 
 // patrat, 4 noduri
-class Sprite {
+class Animation {
 public:
 	float v[20]; // vertex_buffer
 
-	Sprite() {};
+	Animation() {};
 	// ordinea de desenare: 0 1 2 2 3 0
-	Sprite(float x, float y, float sz) { // centrul de referinta pentru patrat si marimea
+	Animation(float x, float y, float sz) { // centrul de referinta pentru patrat si marimea
 		v[0] = -sz + x, v[1] = -sz + y, v[2] = 0.0f, v[3] = 1.0f, v[4] = 1.0f;		// stanga jos
 		v[5] = sz + x, v[6] = -sz + y, v[7] = 0.0f, v[8] = 0.0f, v[9] = 1.0f;		// dreapta jos
 		v[10] = sz + x, v[11] = sz + y, v[12] = 0.0f, v[13] = 0.0f, v[14] = 0.0f;	// dreapta sus
@@ -41,7 +44,7 @@ public:
 		v[1] -= 0.0005, v[6] -= 0.0005;
 		v[11] -= 0.0005, v[16] -= 0.0005;
 	}
-	~Sprite() {}
+	~Animation() {}
 };
 
 class Loaded_Texture {
@@ -85,10 +88,10 @@ public:
 	float mw, mh, speed;
 	float v[20];
 	Player() {
-		v[0] = -0.25f,	v[1] = -0.25f,	v[2] = 0.0f,	v[3] = 0.0f,	v[4] = 0.0f;	// stanga jos
-		v[5] = 0.25f,	v[6] = -0.25f,	v[7] = 0.0f,	v[8] = 1.0f,	v[9] = 0.0f;	// dreapta jos
-		v[10] = 0.25f,	v[11] = 0.25f,	v[12] = 0.0f,	v[13] = 1.0f,	v[14] = 1.0f;	// dreapta sus
-		v[15] = -0.25f,	v[16] = 0.25f,	v[17] = 0.0f,	v[18] = 0.0f,	v[19] = 1.0f;	// stanga sus
+		v[0] = -0.1f,	v[1] = -0.7f,	v[2] = 0.0f,	v[3] = 0.0f,	v[4] = 0.0f;	// stanga jos
+		v[5] = 0.1f,	v[6] = -0.7f,	v[7] = 0.0f,	v[8] = 1.0f,	v[9] = 0.0f;	// dreapta jos
+		v[10] = 0.1f,	v[11] = -0.3f,	v[12] = 0.0f,	v[13] = 1.0f,	v[14] = 1.0f;	// dreapta sus
+		v[15] = -0.1f,	v[16] = -0.3f,	v[17] = 0.0f,	v[18] = 0.0f,	v[19] = 1.0f;	// stanga sus
 		mh = 512; // texture height
 		mw = 1024; // texture width
 		speed = 0.01;
@@ -105,57 +108,53 @@ public:
 	}
 
 	void moveup() {
-		if (v[11] < 1) {
-			v[1] += 0.0001f;
-			v[6] += 0.0001f;
-			v[11] += 0.0001f;
-			v[16] += 0.0001f;
+		if (v[11] < 0) {
+			v[1] += 0.01f;
+			v[6] += 0.01f;
+			v[11] += 0.01f;
+			v[16] += 0.01f;
 		}
 	}
 	void movedown() {
 		if (v[1] > -1) {
-			v[1] -= 0.0001f;
-			v[6] -= 0.0001f;
-			v[11] -= 0.0001f;
-			v[16] -= 0.0001f;
+			v[1] -= 0.01f;
+			v[6] -= 0.01f;
+			v[11] -= 0.01f;
+			v[16] -= 0.01f;
 		}
 	}
 	void moveleft() {
 		if (v[0] > -1) {
-			v[0] -= 0.0001f;
-			v[5] -= 0.0001f;
-			v[10] -= 0.0001f;
-			v[15] -= 0.0001f;
+			v[0] -= 0.01f;
+			v[5] -= 0.01f;
+			v[10] -= 0.01f;
+			v[15] -= 0.01f;
 		}
 	}
 	void moveright() {
 		if (v[10] < 1) {
-			v[0] += 0.0001f;
-			v[5] += 0.0001f;
-			v[10] += 0.0001f;
-			v[15] += 0.0001f;
+			v[0] += 0.01f;
+			v[5] += 0.01f;
+			v[10] += 0.01f;
+			v[15] += 0.01f;
 		}
 	}
 
 	~Player() {}
 };
 
-class SpriteManager {
+class AnimationManager {
 public:
-	Sprite** sprites;	// sprite master vector
+	Animation** sprites;	// sprite master vector
 	Player *player;
 	int nrSprites;
-	SpriteManager() {
-		sprites = (Sprite**)malloc(1000 * sizeof(Sprite*));
+	AnimationManager() {
+		sprites = (Animation**)malloc(1000 * sizeof(Animation*));
 		nrSprites = 0;
 	}
 
-	void addSprite(Sprite *s) {
+	void addAnimation(Animation *s) {
 		sprites[nrSprites++] = s;
-	}
-
-	void setPlayer(Player *player1) {
-		player = player1;
 	}
 
 	void allup() {
@@ -186,6 +185,10 @@ public:
 		}
 	}
 
+	void Update() {
+
+	}
+
 	void Draw() {
 		unsigned int *index_buffer = new unsigned int[6];
 		nrSprites = 1;
@@ -207,7 +210,7 @@ public:
 		glDeleteBuffers(nrSprites * 6 * sizeof(unsigned int), &elementbuffer);
 		nrSprites = 0;
 	}
-	~SpriteManager() {
+	~AnimationManager() {
 		for (int i = 0; i < nrSprites; i++)
 			delete sprites[i];
 		free(sprites);
@@ -283,7 +286,7 @@ int main() {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	SpriteManager *s = new SpriteManager();
+	AnimationManager *s = new AnimationManager();
 
 	double first_press_time = glfwGetTime();
 	double second_press_time;
@@ -335,8 +338,11 @@ int main() {
 	int state_frame = 0;
 	float idle_time = 0;
 
+	PlaySound(TEXT("03.wav"), NULL, SND_ASYNC);
+
 	while (!glfwWindowShouldClose(window)) {
 		//..... Randare................. 
+		float time1 = glfwGetTime();
 		// FPS counter
 		_update_fps_counter(window);
 		//----------
@@ -408,6 +414,7 @@ int main() {
 		glBindTexture(GL_TEXTURE_2D, tex);
 		glUniform1i(tex_loc, 0); // use active texture 0
 
+		s->Update();
 		s->Draw();
 		delete[] vertex_buffer;
 		glDeleteBuffers(1, &vbo);
@@ -419,6 +426,7 @@ int main() {
 		if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_ESCAPE)) {
 			glfwSetWindowShouldClose(window, 1);
 		}
+		while (glfwGetTime() - time1 < 0.016);
 	}
 
 	glDetachShader(shader_programme, vs);
@@ -441,6 +449,7 @@ int main() {
 
 	glfwTerminate();
 	_CrtDumpMemoryLeaks();
+//	PlaySound(TEXT("04.wav"), NULL, SND_SYNC);
 
 	return 0;
 }

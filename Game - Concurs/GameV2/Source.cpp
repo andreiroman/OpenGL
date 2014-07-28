@@ -21,8 +21,8 @@ char * LoadFileInMemory(const char *filename); // load file to buffer
 void _update_fps_counter(GLFWwindow* window, int nrp, float stab_time);
 
 const int NMAX = 1000000;
-const float obj_size = 0.005;
-const int sprite_frame_update = 1000;
+const float obj_size = 0.3125;
+const int sprite_frame_update = 100;
 
 // patrat, 4 noduri
 class Sprite {
@@ -72,6 +72,8 @@ public:
 	int nrSprites;
 	unsigned int* index_buffer;
 	float* vertex_buffer;
+	GLuint elementbuffer;
+
 	SpriteManager() {
 		sprites = (Sprite**)malloc(NMAX * sizeof(Sprite*));
 		nrSprites = 0;
@@ -85,6 +87,9 @@ public:
 			index_buffer[6 * i + 4] = 4 * i + 3;
 			index_buffer[6 * i + 5] = 4 * i;
 		}
+		glGenBuffers(1, &elementbuffer);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, NMAX * 6 * sizeof(unsigned int), index_buffer, GL_STATIC_DRAW);
 	}
 
 	void addSprite() {
@@ -123,21 +128,17 @@ public:
 	}
 
 	void Draw() {
-		GLuint elementbuffer;
-		glGenBuffers(1, &elementbuffer);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, nrSprites * 6 * sizeof(unsigned int), index_buffer, GL_STATIC_DRAW);
-
-		// Draw the triangles !
 		glDrawElements(GL_TRIANGLES, 6 * nrSprites, GL_UNSIGNED_INT, (void*)0);
-		glDeleteBuffers(1, &elementbuffer);
 	}
+
 	~SpriteManager() {
 		for (int i = 0; i < nrSprites; i++)
 			delete sprites[i];
 		free(sprites);
 		free(index_buffer);
 		free(vertex_buffer);
+
+		glDeleteBuffers(1, &elementbuffer);
 	}
 
 };
@@ -244,13 +245,20 @@ int main() {
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, tex);
 		glUniform1i(tex_loc, 0); // use active texture 0
-		// timing 60 fps
-		float time2 = glfwGetTime();
 
 		s->Update(flag);
-
 		s->Draw();
 
+
+		glDeleteBuffers(1, &vbo);
+
+		// facem swap la buffere (Double buffer)
+		glfwSwapBuffers(window);
+
+		glfwPollEvents();
+		if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_ESCAPE)) {
+			glfwSetWindowShouldClose(window, 1);
+		}
 		if (glfwGetTime() - stab_time > 10) {
 			stabil = 1;
 		}
@@ -277,16 +285,7 @@ int main() {
 				s->deleteSprite();
 			}
 		}
-
-		glDeleteBuffers(1, &vbo);
-
-		// facem swap la buffere (Double buffer)
-		glfwSwapBuffers(window);
-
-		glfwPollEvents();
-		if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_ESCAPE)) {
-			glfwSetWindowShouldClose(window, 1);
-		}
+		printf("%f\n", glfwGetTime() - clock1);
 	}
 
 	glDetachShader(shader_programme, vs);
