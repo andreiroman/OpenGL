@@ -1,2 +1,0 @@
-C:/Users/Andrei/Desktop/General/GameV2/bin/CMakeFiles/ALL_BUILD.dir
-C:/Users/Andrei/Desktop/General/GameV2/bin/CMakeFiles/ZERO_CHECK.dir
