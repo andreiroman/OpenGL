@@ -31,30 +31,7 @@ void _update_fps_counter(GLFWwindow* window);
 void LoadImages();
 void LoadImg(char *filename, int nr);
 
-// enenmy ship
-class Enemy {
-public:
-	float v[20]; // vertex_buffer
-
-	Enemy() {};
-	// ordinea de desenare: 0 1 2 2 3 0
-	Enemy(float x, float y, float sz) { // centrul de referinta pentru patrat si marimea
-		v[0] = -sz + x, v[1] = -sz + y, v[2] = 0.0f, v[3] = 1.0f, v[4] = 1.0f;		// stanga jos
-		v[5] = sz + x, v[6] = -sz + y, v[7] = 0.0f, v[8] = 0.0f, v[9] = 1.0f;		// dreapta jos
-		v[10] = sz + x, v[11] = sz + y, v[12] = 0.0f, v[13] = 0.0f, v[14] = 0.0f;	// dreapta sus
-		v[15] = -sz + x, v[16] = sz + y, v[17] = 0.0f, v[18] = 1.0f, v[19] = 0.0f;	// stanga sus
-	}
-	void up() {
-		v[1] += 0.0005, v[6] += 0.0005;
-		v[11] += 0.0005, v[16] += 0.0005;
-	}
-	void down() {
-		v[1] -= 0.0005, v[6] -= 0.0005;
-		v[11] -= 0.0005, v[16] -= 0.0005;
-	}
-	~Enemy() {}
-};
-//XML small-texture
+//XML small texture
 class Loaded_Texture {
 public:
 	int id, width, height, x, y;
@@ -90,14 +67,85 @@ public:
 		free(imageName);
 	}
 };
+//bullet
+class Bullet {
+public:
+	float v[20];
+	int frame;
+	const float unit = 1.0 / 16;
+	Bullet(float *ref) {
+		v[0] = ref[0] + 0.03, v[1] = ref[1] + 0.15, v[2] = 0.0f, v[3] = 0.0f, v[4] = 1.0f;	// stanga jos
+		v[5] = ref[5] - 0.03, v[6] = ref[6] + 0.15, v[7] = 0.0f, v[8] = 1.0 / 16, v[9] = 1.0f;	// dreapta jos
+		v[10] = ref[10] - 0.03, v[11] = ref[11] + 0.05, v[12] = 0.0f, v[13] = 1.0 / 16, v[14] = 0.0f;	// dreapta sus
+		v[15] = ref[15] + 0.03, v[16] = ref[16] + 0.05, v[17] = 0.0f, v[18] = 0.0f, v[19] = 0.0f;	// stanga sus
+		frame = 0;
+	}
+
+	void Update() {
+		float ct = 0.03;
+		v[1] += ct; v[6] += ct; v[11] += ct; v[16] += ct;
+		frame %= 16;
+		if (!frame) {
+			v[3] = v[18] = 0;
+			v[8] = v[13] = unit;
+		}
+		else {
+			v[3] += unit, v[13] += unit;
+			v[8] += unit, v[18] += unit;
+		}
+		++frame;
+	}
+
+	bool Offscreen() {
+		if (v[1] > 1) return true;
+		else return false;
+	}
+
+	void Draw() {
+		glBufferData(GL_ARRAY_BUFFER, 20 * sizeof(float), v, GL_DYNAMIC_DRAW);
+		glUniform1i(tex_loc, 11);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (void*)0);
+	}
+
+	~Bullet() {}
+};
+// enenmy ship
+class Enemy {
+public:
+	float v[20]; // vertex_buffer
+
+	Enemy() {};
+	// ordinea de desenare: 0 1 2 2 3 0
+	Enemy(float x, float y, float sz) { // centrul de referinta pentru patrat si marimea
+		v[0] = -sz + x, v[1] = -sz + y, v[2] = 0.0f, v[3] = 1.0f, v[4] = 1.0f;		// stanga jos
+		v[5] = sz + x, v[6] = -sz + y, v[7] = 0.0f, v[8] = 0.0f, v[9] = 1.0f;		// dreapta jos
+		v[10] = sz + x, v[11] = sz + y, v[12] = 0.0f, v[13] = 0.0f, v[14] = 0.0f;	// dreapta sus
+		v[15] = -sz + x, v[16] = sz + y, v[17] = 0.0f, v[18] = 1.0f, v[19] = 0.0f;	// stanga sus
+	}
+	void up() {
+		v[1] += 0.0005, v[6] += 0.0005;
+		v[11] += 0.0005, v[16] += 0.0005;
+	}
+	void down() {
+		v[1] -= 0.0005, v[6] -= 0.0005;
+		v[11] -= 0.0005, v[16] -= 0.0005;
+	}
+	~Enemy() {}
+};
 //Player ship
 class Player {
 public:
 	float mw, mh, time, state_frame;
-	float v[20];
+	float v[20], th[20];
 	int curr_tex;	// current mini-texture
 	int state;		// 1 idle/ 2 left/ 3 right
 	int level;
+	int thrust = 0;
+
+	Bullet **bullets;
+	float last_shot;
+	const float bullet_delay_time = 0.3;
+	int nr_bullets;
 
 	Loaded_Texture **texes;
 	Player() {
@@ -107,7 +155,7 @@ public:
 		FILE *f = fopen("../AnimatiiExemplu/player.xml", "r");
 		if (f == NULL) {
 			printf("Error opening Player XML");
-		}
+		}	
 		char *fileContent = (char*)malloc(5000);
 		memset(fileContent, '\000', 5000);
 		int nr = 0;
@@ -140,6 +188,8 @@ public:
 		mh = 512; // texture height
 		mw = 1024; // texture width
 		level = 0;
+		bullets = (Bullet**)malloc(100 * sizeof(Bullet*));
+		last_shot = 0;
 	}
 	// initializare pozitie
 	void init(int lvl) {
@@ -147,22 +197,28 @@ public:
 		v[5] = 0.075f, v[6] = -0.7f, v[7] = 0.0f, v[8] = 1.0f, v[9] = 0.0f;	// dreapta jos
 		v[10] = 0.075f, v[11] = -0.4f, v[12] = 0.0f, v[13] = 1.0f, v[14] = 1.0f;	// dreapta sus
 		v[15] = -0.075f, v[16] = -0.4f, v[17] = 0.0f, v[18] = 0.0f, v[19] = 1.0f;	// stanga sus
+
+		th[0] = -0.075f, th[1] = -0.7f, th[2] = 0.0f, th[3] = 0.0f, th[4] = 1.0f;	// stanga jos
+		th[5] = 0.075f, th[6] = -0.7f, th[7] = 0.0f, th[8] = 1.0/16, th[9] = 1.0f;	// dreapta jos
+		th[10] = 0.075f, th[11] = -0.4f, th[12] = 0.0f, th[13] = 1.0/16, th[14] = 0.0f;	// dreapta sus
+		th[15] = -0.075f, th[16] = -0.4f, th[17] = 0.0f, th[18] = 0.0f, th[19] = 0.0f;	// stanga sus
+
 		time = glfwGetTime();
 		curr_tex = 0;
 		changeVectors(texes[curr_tex]);
 		level = lvl;
+		Update();
 	}
 
 	void changeVectors(Loaded_Texture *t) {
-		//	printf("%d %d %d %d\n", t->x, t->y, t->width, t->height);
 		v[3] = (float)t->x / mw + (float)t->width / mw, v[4] = (float)t->y / mh + (float)t->height / mh;
 		v[8] = (float)t->x / mw, v[9] = (float)t->y / mh + (float)t->height / mh;
 		v[13] = (float)t->x / mw, v[14] = (float)t->y / mh;
 		v[18] = (float)t->x / mw + (float)t->width / mw, v[19] = (float)t->y / mh;
-		//	printf("%f %f %f %f %f %f %f %f\n", v[3], v[4], v[8], v[9], v[13], v[14], v[18], v[19]);
 	}
 
 	void Update() {
+		// ship
 		if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_D)) {
 			moveright();
 			if (state != 1) {
@@ -190,6 +246,52 @@ public:
 			if (state == 1) changeVectors(texes[curr_tex + 16]);
 			if (state == 2) changeVectors(texes[curr_tex + 32]);
 		}
+		// thrust
+		thrust %= 16;
+		th[0] = v[0] + 0.015; th[1] = v[1] - 0.26;
+		th[5] = v[5] - 0.015; th[6] = v[6] - 0.26;
+		th[10] = v[10] - 0.015; th[11] = v[11] - 0.26;
+		th[15] = v[15] + 0.015; th[16] = v[16] - 0.26;
+
+		if (thrust == 0) {
+			th[8] = th[13] = 0;
+			th[3] = th[18] = 1.0 / 16;
+		}
+		else {
+			float step = 1.0 / 16;
+			th[3] += step;
+			th[8] += step;
+			th[13] += step;
+			th[18] += step;
+		}
+		++thrust;
+		// bullets
+		if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_SPACE) && glfwGetTime() - last_shot > bullet_delay_time) {
+			last_shot = glfwGetTime();
+			bullets[nr_bullets++] = new Bullet(v);
+		}
+		for (int i = 0; i < nr_bullets;) {
+			bullets[i]->Update();
+			if (bullets[i]->Offscreen()) {
+				delete bullets[i];
+				bullets[i] = bullets[--nr_bullets];
+			}
+			else i++;
+		}
+	}
+
+	void Draw() {
+		// ship
+		glBufferData(GL_ARRAY_BUFFER, 20 * sizeof(float), v, GL_DYNAMIC_DRAW);
+		glUniform1i(tex_loc, 0);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (void*)0);
+		// thrust
+		glBufferData(GL_ARRAY_BUFFER, 20 * sizeof(float), th, GL_DYNAMIC_DRAW);
+		glUniform1i(tex_loc, 10);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (void*)0);
+		// bullets
+		for (int i = 0; i < nr_bullets; i++)
+			bullets[i]->Draw();
 	}
 
 	void moveup() {
@@ -230,6 +332,10 @@ public:
 			delete texes[i];
 		}
 		delete[] texes;
+		for (int i = 0; i < nr_bullets; i++) {
+			delete bullets[i];
+		}
+		delete[] bullets;
 	}
 };
 
@@ -248,6 +354,8 @@ public:
 	int flag; // 0, 1, 2, 3 (waiting screen, Lv 1, 2..)
 	int bg_id, dir; // background id, intre 1,2,3 sau 4
 	float *bg_buf, bg_timer;
+
+	int click_flag;
 
 	AnimationManager() {
 		enemies = (Enemy**)malloc(1000 * sizeof(Enemy*));
@@ -270,6 +378,7 @@ public:
 		flag = 0;
 		bg_id = 1;
 		bg_init();
+		click_flag = -1;
 	}
 
 	void addAnimation(Enemy *s) {
@@ -310,27 +419,38 @@ public:
 
 	void Update() {
 
-		if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_0)) {
+		if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_0) || click_flag == 0) {
 			flag = 0;
+			click_flag = -1;
 			bg_id = 1;
 			bg_init();
 			player->init(0);
 		}
-		if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_1)) {
+		if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_1) || click_flag == 1) {
 			flag = 1;
+			click_flag = -1;
 			bg_id = 2;
 			bg_init();
 			player->init(1);
 		}
-		if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_2)) {
+		if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_2) || click_flag == 2) {
 			flag = 2;
+			click_flag = -1;
 			bg_id = 3;
 			bg_init();
 			player->init(2);
 		}
-		if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_3)) {
+		if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_3) || click_flag == 3) {
 			flag = 3;
+			click_flag = -1;
 			bg_id = 4;
+			bg_init();
+			player->init(3);
+		}
+		if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_4) || click_flag == 4) {
+			flag = 4;
+			click_flag = -1;
+			bg_id = 5;
 			bg_init();
 			player->init(3);
 		}
@@ -346,6 +466,14 @@ public:
 			memcpy(vertex_buffer, player->v, 20 * sizeof(float));
 		}
 		if (flag == 3) {
+			player->Update();
+			memcpy(vertex_buffer, player->v, 20 * sizeof(float));
+		}
+		if (flag == 4) {
+			player->Update();
+			memcpy(vertex_buffer, player->v, 20 * sizeof(float));
+		}
+		if (flag == 5) {
 			player->Update();
 			memcpy(vertex_buffer, player->v, 20 * sizeof(float));
 		}
@@ -378,14 +506,17 @@ public:
 		int bg_nr = 1;
 		if (bg_id == 2) bg_nr = 2;
 		glBufferData(GL_ARRAY_BUFFER, bg_nr * 20 * sizeof(float), bg_buf, GL_DYNAMIC_DRAW);
-		glUniform1i(tex_loc, bg_id); // use active texture 0
+		glUniform1i(tex_loc, bg_id);
 		glDrawElements(GL_TRIANGLES, bg_nr * 6, GL_UNSIGNED_INT, (void*)0);
+
+		// buttons, home screen
+		if (flag == 0) {
+			DrawHomeButtons();
+		}
 
 		// player
 		if (flag != 0) {
-			glBufferData(GL_ARRAY_BUFFER, 20 * sizeof(float), vertex_buffer, GL_DYNAMIC_DRAW);
-			glUniform1i(tex_loc, 0); // use active texture 0
-			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (void*)0);
+			player->Draw();
 		}
 	}
 
@@ -408,7 +539,7 @@ public:
 			bg_buf[30] = 1, bg_buf[31] = 5, bg_buf[32] = 0.0f, bg_buf[33] = 1.0f, bg_buf[34] = 1.0f;	// dreapta sus
 			bg_buf[35] = -1, bg_buf[36] = 5, bg_buf[37] = 0.0f, bg_buf[38] = 0.0f, bg_buf[39] = 1.0f;	// stanga sus
 		}
-		if (bg_id == 3 || bg_id == 4) {
+		if (bg_id == 3 || bg_id == 4 || bg_id == 5) {
 			bg_buf[0] = -1, bg_buf[1] = -1, bg_buf[2] = 0.0f, bg_buf[3] = 0.0f, bg_buf[4] = 0.0f;	// stanga jos
 			bg_buf[5] = 1, bg_buf[6] = -1, bg_buf[7] = 0.0f, bg_buf[8] = 1.0f, bg_buf[9] = 0.0f;	// dreapta jos
 			bg_buf[10] = 1, bg_buf[11] = 1, bg_buf[12] = 0.0f, bg_buf[13] = 1.0f, bg_buf[14] = 1.0f;	// dreapta sus
@@ -459,6 +590,59 @@ public:
 				bg_buf[21] = 2; bg_buf[26] = 2; bg_buf[31] = 5; bg_buf[36] = 5;
 			}
 		}
+	}
+
+	void DrawHomeButtons() { // "pretty code"
+		float bt_buf[20];
+		bt_buf[0] = -0.4f, bt_buf[1] = 0.3f, bt_buf[2] = 0.0f, bt_buf[3] = 0.0f, bt_buf[4] = 1.0f;	// stanga jos
+		bt_buf[5] = 0.4f, bt_buf[6] = 0.3f, bt_buf[7] = 0.0f, bt_buf[8] = 1.0f, bt_buf[9] = 1.0f;	// dreapta jos
+		bt_buf[10] = 0.4f, bt_buf[11] = 0.5f, bt_buf[12] = 0.0f, bt_buf[13] = 1.0f, bt_buf[14] = 0.0f;	// dreapta sus
+		bt_buf[15] = -0.4f, bt_buf[16] = 0.5f, bt_buf[17] = 0.0f, bt_buf[18] = 0.0f, bt_buf[19] = 0.0f;	// stanga sus
+
+		double x, y;
+		glfwGetCursorPos(window, &x, &y);
+		y = 768 - y;
+		x /= 512; x -= 1; y /= 384; y -= 1;
+
+		if (x >= bt_buf[0] && x <= bt_buf[5] && y >= bt_buf[1] && y <= bt_buf[11]) {
+			if (GLFW_PRESS == glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1)) click_flag = 1;
+			glBlendFunc(GL_SRC_ALPHA, GL_SRC_COLOR);
+		}
+		else glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(bt_buf), bt_buf, GL_DYNAMIC_DRAW);
+		glUniform1i(tex_loc, 6);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (void*)0);
+
+		bt_buf[1] -= 0.3; bt_buf[6] -= 0.3; bt_buf[11] -= 0.3; bt_buf[16] -= 0.3;
+		if (x >= bt_buf[0] && x <= bt_buf[5] && y >= bt_buf[1] && y <= bt_buf[11]) {
+			if (GLFW_PRESS == glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1)) click_flag = 2;
+			glBlendFunc(GL_SRC_ALPHA, GL_SRC_COLOR);
+		}
+		else glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(bt_buf), bt_buf, GL_DYNAMIC_DRAW);
+		glUniform1i(tex_loc, 7);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (void*)0);
+
+		bt_buf[1] -= 0.3; bt_buf[6] -= 0.3; bt_buf[11] -= 0.3; bt_buf[16] -= 0.3;
+		if (x >= bt_buf[0] && x <= bt_buf[5] && y >= bt_buf[1] && y <= bt_buf[11]) {
+			if (GLFW_PRESS == glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1)) click_flag = 3;
+			glBlendFunc(GL_SRC_ALPHA, GL_SRC_COLOR);
+		}
+		else glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(bt_buf), bt_buf, GL_DYNAMIC_DRAW);
+		glUniform1i(tex_loc, 8);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (void*)0);
+
+		bt_buf[1] -= 0.3; bt_buf[6] -= 0.3; bt_buf[11] -= 0.3; bt_buf[16] -= 0.3;
+		if (x >= bt_buf[0] && x <= bt_buf[5] && y >= bt_buf[1] && y <= bt_buf[11]) {
+			if (GLFW_PRESS == glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1)) click_flag = 4;
+			glBlendFunc(GL_SRC_ALPHA, GL_SRC_COLOR);
+		}
+		else glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(bt_buf), bt_buf, GL_DYNAMIC_DRAW);
+		glUniform1i(tex_loc, 9);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (void*)0);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // back to normal
 	}
 
 	~AnimationManager() {
@@ -536,14 +720,25 @@ int main() {
 	s->addPlayer(new Player());
 	//	PlaySound(TEXT("03.wav"), NULL, SND_ASYNC);
 
+	float prevTime = glfwGetTime();
+	const float frame_time = 1.0 / 60;
+	float accumulator = 0;
+
 	while (!glfwWindowShouldClose(window)) {
 		//..... Randare................. 
-		float time1 = glfwGetTime();
 		// FPS counter
 		_update_fps_counter(window);
+
+		// time control
+		float deltaTime = (float)(glfwGetTime() - prevTime);
+		prevTime = glfwGetTime();
+		accumulator += deltaTime;
 		//----------
 
-		s->Update();
+		while (accumulator >= frame_time) {
+			s->Update();
+			accumulator -= frame_time;
+		}
 		s->Draw();
 
 		// facem swap la buffere (Double buffer)
@@ -553,7 +748,6 @@ int main() {
 		if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_ESCAPE)) {
 			glfwSetWindowShouldClose(window, 1);
 		}
-		while (glfwGetTime() - time1 < 1.0/60); //60fps
 	}
 
 	glDetachShader(shader_programme, vs);
@@ -561,7 +755,6 @@ int main() {
 	glDeleteShader(vs);
 	glDeleteShader(fs);
 
-//	glDeleteTextures(1, &player_tex);
 	glDeleteBuffers(1, &vs);
 	glDeleteBuffers(1, &fs);
 
@@ -582,7 +775,13 @@ void LoadImages() {
 	LoadImg("../Data/Sprites/bg1.png", 2);
 	LoadImg("../Data/Sprites/bg2.png", 3);
 	LoadImg("../Data/Sprites/bg3.png", 4);
-//	LoadImg();
+	LoadImg("../Data/Sprites/bg4.png", 5);
+	LoadImg("../Data/Sprites/bt1.png", 6);
+	LoadImg("../Data/Sprites/bt2.png", 7);
+	LoadImg("../Data/Sprites/bt3.png", 8);
+	LoadImg("../Data/Sprites/bt4.png", 9);
+	LoadImg("../Data/Sprites/thrust.png", 10);
+	LoadImg("../Data/Sprites/projectile1.png", 11);
 }
 
 // load image
@@ -642,3 +841,12 @@ char * LoadFileInMemory(const char *filename)
 	buffer[size] = '\000';
 	return buffer;
 }
+
+/*
+			__
+		   / _)    rawr!
+	.-^^^-/ /
+ __/       /
+<__.|_|-|_|
+
+*/
