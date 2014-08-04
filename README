@@ -1,18 +1,6 @@
-"O" - Space Shooter
+"0" - meniul principal
+"1" - primul nivel
+"2" - al doilea nivel
+"3" - game over
 
-Author: Andrei Roman
-
-Implementat:
---interactiune (taste):
-"0" - homescreen
-"1", "2", "3" - trecere la diverse nivele
---Homescreen: un background miscator
---Nivelul 1: background infinit, Player ship
---Nivelul 2, Nivelul 3: Background solid, Player ship
-
-De implementat:
---Homescreen: Butoane pentru a trece la celelalte nivele
---Nivelul 1: shooter, enemy ships + bullets
---Nivelul 2: collect random tokens(vor fi de mai multe tipuri)
---Nivelul 3: push objects out of the screen
---Nivelul 4: avoid enemy objects
+Ship controls: WASD
