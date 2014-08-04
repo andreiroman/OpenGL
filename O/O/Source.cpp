@@ -512,6 +512,7 @@ public:
 			v[11] += ct, v[16] += ct;
 			rewind = glfwGetTime();
 			rewind_state = 1;
+	//		PlaySound
 		}
 
 		for (int i = 0; i < nr_bullets;) {
@@ -609,6 +610,7 @@ public:
 	float astro_time;
 	int click_flag;
 	int score = 0;
+	int current_song;
 
 	AnimationManager() {
 		enemies = (Enemy**)malloc(1000 * sizeof(Enemy*));
@@ -635,6 +637,8 @@ public:
 		bg_id = 1;
 		bg_init();
 		click_flag = -1;
+		PlaySound(TEXT("../Data/Wavs/homescreen.wav"), NULL, SND_ASYNC | SND_LOOP);
+		current_song = 1;
 	}
 
 	void setPlayer(Player *p) {
@@ -644,6 +648,7 @@ public:
 	void init_update(){
 		click_flag = -1;
 		bg_init();
+		player->health = 1000;
 		spawn_time = last_spawn = glfwGetTime();
 		while (nr_ebullets) delete ebullets[--nr_ebullets];
 		while (nr_enemies) delete enemies[--nr_enemies];
@@ -654,6 +659,9 @@ public:
 	void Update() {
 
 		if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_0) || click_flag == 0) {
+			if (current_song != 1)
+				PlaySound(TEXT("../Data/Wavs/homescreen.wav"), NULL, SND_ASYNC | SND_LOOP);
+			current_song = 1;
 			flag = 0;
 			score = 0;
 			bg_id = 1;
@@ -661,20 +669,30 @@ public:
 			player->init(0);
 		}
 		if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_1) || click_flag == 1) {
+			if (current_song != 2) {
+				PlaySound(TEXT("../Data/Wavs/OK.wav"), NULL, SND_ASYNC);
+				PlaySound(TEXT("../Data/Wavs/30.wav"), NULL, SND_ASYNC | SND_NOSTOP | SND_LOOP);
+			}
+			current_song = 2;
 			flag = 1;
 			score = 0;
 			astro_time = glfwGetTime();
 			bg_id = 2;
 			init_update();
-			spawn_delay = 1.1;
+			spawn_delay = 0.5;
 			player->init(1);
 		}
 		if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_2) || click_flag == 2) {
+			if (current_song != 3) {
+				PlaySound(TEXT("../Data/Wavs/OK.wav"), NULL, SND_ASYNC);
+				PlaySound(TEXT("../Data/Wavs/26.wav"), NULL, SND_ASYNC | SND_NOSTOP | SND_LOOP);
+			}
+			current_song = 3;
 			flag = 2;
 			score = 0;
 			bg_id = 3;
 			init_update();
-			spawn_delay = 0.9;
+			spawn_delay = 0.4;
 			player->init(2);
 		}
 		if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_3) || click_flag == 3) {
@@ -685,6 +703,7 @@ public:
 		}
 
 		if (flag == 1) {
+			PlaySound(TEXT("../Data/Wavs/30.wav"), NULL, SND_ASYNC | SND_NOSTOP | SND_LOOP);
 			player->Update();
 			for (int i = 0; i < nr_enemies;) {
 				enemies[i]->Update(player->v);
@@ -700,7 +719,7 @@ public:
 			}
 
 			if (glfwGetTime() - spawn_time > 10) {
-				spawn_delay *= 7.0 / 8;
+				spawn_delay *= 3.0 / 8;
 				spawn_time = glfwGetTime();
 			}
 			ColPlayerBulletEnemyBullet();
@@ -726,6 +745,7 @@ public:
 		}
 
 		if (flag == 2) {
+			PlaySound(TEXT("../Data/Wavs/26.wav"), NULL, SND_ASYNC | SND_NOSTOP | SND_LOOP);
 			player->Update();
 			for (int i = 0; i < nr_resources;) {
 				resources[i]->Update();
@@ -745,6 +765,12 @@ public:
 				spawn_time = glfwGetTime();
 			}
 			ColPlayerResource();
+			if (player->health <= 0) {
+				flag = 3;
+				bg_id = 4;
+				init_update();
+				player->init(0);
+			}
 			memcpy(vertex_buffer, player->v, 20 * sizeof(float));
 		}
 
@@ -788,7 +814,8 @@ public:
 		glUseProgram(shader_programme);
 	}
 
-	void scoreDraw(int f1, int f2) {
+	void scoreDraw(int f1) {
+		if (score < 0) score = 0;
 		if (f1 == 1 || f1 == 2) {
 			float vs[20];
 			vs[0] = -0.95f, vs[1] = 0.7f, vs[2] = 0.0f, vs[3] = 0.0f, vs[4] = 1.0f;	// stanga jos
@@ -811,7 +838,7 @@ public:
 			int aux2 = score;
 			int aux = 0;
 			int zero = 0;
-			if (aux2 == 0) zero = 1;
+			if (score == 0) zero = 1;
 			while (aux2 > 9 && aux2 % 10 == 0) {
 				aux2 /= 10;
 				++zero;
@@ -822,7 +849,6 @@ public:
 				aux += cif;
 				aux2 /= 10;
 			}
-			printf("%d %d\n", f1, score);
 			while (aux) {
 				int cif = aux % 10;
 				aux /= 10;
@@ -857,7 +883,7 @@ public:
 		vs[10] = 0.5f, vs[11] = 0.95f, vs[12] = 0.0f, vs[13] = 1.0, vs[14] = 0.0f;	// dreapta sus
 		vs[15] = 0.3f, vs[16] = 0.95f, vs[17] = 0.0f, vs[18] = 0.0f, vs[19] = 0.0f;	// stanga sus
 		glBufferData(GL_ARRAY_BUFFER, 20 * sizeof(float), vs, GL_DYNAMIC_DRAW);
-		glUniform1i(tex_loc, 20);
+		glUniform1i(tex_loc, 21);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (void*)0);
 		vs[0] = vs[15] = 0.5;
 		vs[5] = vs[10] = 0.6;
@@ -876,6 +902,7 @@ public:
 			aux2 /= 10;
 		}
 		while (aux) {
+
 			int cif = aux % 10;
 			aux /= 10;
 			vs[3] = vs[18] = (cif * 1.0 / 10) - 0.1;
@@ -910,13 +937,13 @@ public:
 		glDrawElements(GL_TRIANGLES, bg_nr * 6, GL_UNSIGNED_INT, (void*)0);
 
 		if (flag == 1) {
-			scoreDraw(1, score);
+			scoreDraw(1);
 		}
 		if (flag == 2) {
-			scoreDraw(1, score);
+			scoreDraw(1);
 		}
 		if (flag == 3) {
-			scoreDraw(2, score);
+			scoreDraw(2);
 		}
 
 		// buttons, home screen
@@ -989,13 +1016,13 @@ public:
 				else dir = 0;
 			}
 			if (dir == 2) {
-				if (bg_buf[14] < 1) { // up
+				if (bg_buf[4] < 1) { // up
 					bg_buf[4] += ct; bg_buf[9] += ct; bg_buf[14] += ct; bg_buf[19] += ct;
 				}
 				else dir = 3;
 			}
 			if (dir == 3) {
-				if (bg_buf[4] > 0) { // down
+				if (bg_buf[14] > 0) { // down
 					bg_buf[4] -= ct; bg_buf[9] -= ct; bg_buf[14] -= ct; bg_buf[19] -= ct;
 				}
 				else dir = 2;
@@ -1045,7 +1072,7 @@ public:
 		glUniform1i(tex_loc, 7);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (void*)0);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // back to 
-		if (flag == 3) scoreDraw(2, score);
+		if (flag == 3) scoreDraw(2);
 
 		// Astro
 		astro_frame %= 6;
@@ -1332,7 +1359,7 @@ void LoadImages() {
 	LoadImg("../Data/Sprites/strip_fighter.png", 18);
 	LoadImg("../Data/Sprites/gun_blast.png", 19);
 	LoadImg("../Data/Sprites/gun_blast_blue.png", 20);
-	LoadImg("../Data/Sprites/health.png", 20);
+	LoadImg("../Data/Sprites/health.png", 21);
 }
 
 // load image

@@ -1,4 +1,4 @@
-﻿Build started 8/4/2014 10:14:43 AM.
+﻿Build started 8/4/2014 4:50:57 PM.
      1>Project "C:\Users\Andrei\Desktop\General\O\O\O.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /IC:\Users\Andrei\Desktop\General\O\\include /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Source.cpp
@@ -55,59 +55,58 @@
      1>c:\users\andrei\desktop\general\o\o\source.cpp(501): warning C4305: 'initializing' : truncation from 'double' to 'float'
      1>c:\users\andrei\desktop\general\o\o\source.cpp(509): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
      1>c:\users\andrei\desktop\general\o\o\source.cpp(513): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\andrei\desktop\general\o\o\source.cpp(558): warning C4305: 'initializing' : truncation from 'double' to 'float'
-     1>c:\users\andrei\desktop\general\o\o\source.cpp(567): warning C4305: 'initializing' : truncation from 'double' to 'float'
-     1>c:\users\andrei\desktop\general\o\o\source.cpp(647): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\andrei\desktop\general\o\o\source.cpp(666): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\andrei\desktop\general\o\o\source.cpp(669): warning C4305: '=' : truncation from 'double' to 'float'
-     1>c:\users\andrei\desktop\general\o\o\source.cpp(677): warning C4305: '=' : truncation from 'double' to 'float'
-     1>c:\users\andrei\desktop\general\o\o\source.cpp(698): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\andrei\desktop\general\o\o\source.cpp(704): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\andrei\desktop\general\o\o\source.cpp(739): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\andrei\desktop\general\o\o\source.cpp(745): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\andrei\desktop\general\o\o\source.cpp(803): warning C4305: '=' : truncation from 'double' to 'float'
-     1>c:\users\andrei\desktop\general\o\o\source.cpp(804): warning C4305: '=' : truncation from 'double' to 'float'
-     1>c:\users\andrei\desktop\general\o\o\source.cpp(806): warning C4305: '=' : truncation from 'double' to 'float'
-     1>c:\users\andrei\desktop\general\o\o\source.cpp(807): warning C4305: '=' : truncation from 'double' to 'float'
-     1>c:\users\andrei\desktop\general\o\o\source.cpp(808): warning C4305: '=' : truncation from 'double' to 'float'
-     1>c:\users\andrei\desktop\general\o\o\source.cpp(809): warning C4305: '=' : truncation from 'double' to 'float'
-     1>c:\users\andrei\desktop\general\o\o\source.cpp(829): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\andrei\desktop\general\o\o\source.cpp(830): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\andrei\desktop\general\o\o\source.cpp(559): warning C4305: 'initializing' : truncation from 'double' to 'float'
+     1>c:\users\andrei\desktop\general\o\o\source.cpp(568): warning C4305: 'initializing' : truncation from 'double' to 'float'
+     1>c:\users\andrei\desktop\general\o\o\source.cpp(652): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\andrei\desktop\general\o\o\source.cpp(679): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\andrei\desktop\general\o\o\source.cpp(695): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\andrei\desktop\general\o\o\source.cpp(717): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\andrei\desktop\general\o\o\source.cpp(723): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\andrei\desktop\general\o\o\source.cpp(759): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\andrei\desktop\general\o\o\source.cpp(765): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\andrei\desktop\general\o\o\source.cpp(830): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\andrei\desktop\general\o\o\source.cpp(831): warning C4305: '=' : truncation from 'double' to 'float'
      1>c:\users\andrei\desktop\general\o\o\source.cpp(833): warning C4305: '=' : truncation from 'double' to 'float'
-     1>c:\users\andrei\desktop\general\o\o\source.cpp(838): warning C4305: '+=' : truncation from 'double' to 'float'
-     1>c:\users\andrei\desktop\general\o\o\source.cpp(839): warning C4305: '+=' : truncation from 'double' to 'float'
-     1>c:\users\andrei\desktop\general\o\o\source.cpp(843): warning C4305: '=' : truncation from 'double' to 'float'
-     1>c:\users\andrei\desktop\general\o\o\source.cpp(847): warning C4305: '+=' : truncation from 'double' to 'float'
-     1>c:\users\andrei\desktop\general\o\o\source.cpp(848): warning C4305: '+=' : truncation from 'double' to 'float'
-     1>c:\users\andrei\desktop\general\o\o\source.cpp(863): warning C4305: '=' : truncation from 'double' to 'float'
-     1>c:\users\andrei\desktop\general\o\o\source.cpp(881): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\andrei\desktop\general\o\o\source.cpp(882): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\andrei\desktop\general\o\o\source.cpp(885): warning C4305: '=' : truncation from 'double' to 'float'
-     1>c:\users\andrei\desktop\general\o\o\source.cpp(890): warning C4305: '+=' : truncation from 'double' to 'float'
-     1>c:\users\andrei\desktop\general\o\o\source.cpp(891): warning C4305: '+=' : truncation from 'double' to 'float'
-     1>c:\users\andrei\desktop\general\o\o\source.cpp(895): warning C4305: '=' : truncation from 'double' to 'float'
-     1>c:\users\andrei\desktop\general\o\o\source.cpp(899): warning C4305: '+=' : truncation from 'double' to 'float'
-     1>c:\users\andrei\desktop\general\o\o\source.cpp(900): warning C4305: '+=' : truncation from 'double' to 'float'
-     1>c:\users\andrei\desktop\general\o\o\source.cpp(946): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\andrei\desktop\general\o\o\source.cpp(976): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\andrei\desktop\general\o\o\source.cpp(978): warning C4305: 'initializing' : truncation from 'double' to 'float'
+     1>c:\users\andrei\desktop\general\o\o\source.cpp(834): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\andrei\desktop\general\o\o\source.cpp(835): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\andrei\desktop\general\o\o\source.cpp(836): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\andrei\desktop\general\o\o\source.cpp(855): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\andrei\desktop\general\o\o\source.cpp(856): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\andrei\desktop\general\o\o\source.cpp(859): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\andrei\desktop\general\o\o\source.cpp(864): warning C4305: '+=' : truncation from 'double' to 'float'
+     1>c:\users\andrei\desktop\general\o\o\source.cpp(865): warning C4305: '+=' : truncation from 'double' to 'float'
+     1>c:\users\andrei\desktop\general\o\o\source.cpp(869): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\andrei\desktop\general\o\o\source.cpp(873): warning C4305: '+=' : truncation from 'double' to 'float'
+     1>c:\users\andrei\desktop\general\o\o\source.cpp(874): warning C4305: '+=' : truncation from 'double' to 'float'
+     1>c:\users\andrei\desktop\general\o\o\source.cpp(889): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\andrei\desktop\general\o\o\source.cpp(908): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\andrei\desktop\general\o\o\source.cpp(909): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\andrei\desktop\general\o\o\source.cpp(912): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\andrei\desktop\general\o\o\source.cpp(917): warning C4305: '+=' : truncation from 'double' to 'float'
+     1>c:\users\andrei\desktop\general\o\o\source.cpp(918): warning C4305: '+=' : truncation from 'double' to 'float'
+     1>c:\users\andrei\desktop\general\o\o\source.cpp(922): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\andrei\desktop\general\o\o\source.cpp(926): warning C4305: '+=' : truncation from 'double' to 'float'
+     1>c:\users\andrei\desktop\general\o\o\source.cpp(927): warning C4305: '+=' : truncation from 'double' to 'float'
+     1>c:\users\andrei\desktop\general\o\o\source.cpp(973): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\andrei\desktop\general\o\o\source.cpp(1003): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
      1>c:\users\andrei\desktop\general\o\o\source.cpp(1005): warning C4305: 'initializing' : truncation from 'double' to 'float'
-     1>c:\users\andrei\desktop\general\o\o\source.cpp(1038): warning C4305: '-=' : truncation from 'double' to 'float'
-     1>c:\users\andrei\desktop\general\o\o\source.cpp(1053): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\andrei\desktop\general\o\o\source.cpp(1054): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\andrei\desktop\general\o\o\source.cpp(1058): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\andrei\desktop\general\o\o\source.cpp(1165): warning C4305: 'initializing' : truncation from 'double' to 'float'
-     1>c:\users\andrei\desktop\general\o\o\source.cpp(1262): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\andrei\desktop\general\o\o\source.cpp(1263): warning C4305: 'initializing' : truncation from 'double' to 'const float'
-     1>c:\users\andrei\desktop\general\o\o\source.cpp(1269): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\andrei\desktop\general\o\o\source.cpp(1275): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\andrei\desktop\general\o\o\source.cpp(1257): warning C4101: 'second_press_time' : unreferenced local variable
+     1>c:\users\andrei\desktop\general\o\o\source.cpp(1032): warning C4305: 'initializing' : truncation from 'double' to 'float'
+     1>c:\users\andrei\desktop\general\o\o\source.cpp(1065): warning C4305: '-=' : truncation from 'double' to 'float'
+     1>c:\users\andrei\desktop\general\o\o\source.cpp(1080): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\andrei\desktop\general\o\o\source.cpp(1081): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\andrei\desktop\general\o\o\source.cpp(1085): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\andrei\desktop\general\o\o\source.cpp(1192): warning C4305: 'initializing' : truncation from 'double' to 'float'
+     1>c:\users\andrei\desktop\general\o\o\source.cpp(1289): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\andrei\desktop\general\o\o\source.cpp(1290): warning C4305: 'initializing' : truncation from 'double' to 'const float'
+     1>c:\users\andrei\desktop\general\o\o\source.cpp(1296): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\andrei\desktop\general\o\o\source.cpp(1302): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\andrei\desktop\general\o\o\source.cpp(1284): warning C4101: 'second_press_time' : unreferenced local variable
      1>c:\users\andrei\desktop\general\o\o\source.cpp(106): warning C4715: 'Explosion::isTerminated' : not all control paths return a value
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Andrei\Desktop\General\O\Debug\O.exe" /INCREMENTAL /NOLOGO /LIBPATH:C:\Users\Andrei\Desktop\General\O\\lib glew32.lib glfw3dll.lib opengl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Andrei\Desktop\General\O\Debug\O.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Andrei\Desktop\General\O\Debug\O.lib" /MACHINE:X86 Debug\Source.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Andrei\Desktop\General\O\Debug\O.exe" /INCREMENTAL /NOLOGO /LIBPATH:C:\Users\Andrei\Desktop\General\O\\lib glew32.lib glfw3dll.lib opengl32.lib winmm.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Andrei\Desktop\General\O\Debug\O.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Andrei\Desktop\General\O\Debug\O.lib" /MACHINE:X86 Debug\Source.obj
          O.vcxproj -> C:\Users\Andrei\Desktop\General\O\Debug\O.exe
      1>Done Building Project "C:\Users\Andrei\Desktop\General\O\O\O.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.85
+Time Elapsed 00:00:01.11
