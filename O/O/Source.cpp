@@ -129,8 +129,9 @@ public:
 	float prev_time;
 
 	Resource() {
-		type = rand() % 2 + 1;
-		size = (float)(rand() % 500 + 100) / 10000;
+		if (rand() % 100 < 70) type = 1;
+		else type = 2;
+		size = (float)(rand() % 600 + 150) / 10000;
 		speed = (float)(rand() % 200 + 50) / 10000;
 		float loc = (float)(rand() % 95 - 50) / 55;
 		if (type == 1) step = 1.0 / 12;
@@ -360,7 +361,7 @@ public:
 
 	Bullet **bullets;
 	float last_shot = 0;
-	const float bullet_delay_time = 0.2;
+	const float bullet_delay_time = 0.15;
 	int nr_bullets;
 		
 	const float rewind_time = 0.1;
@@ -613,10 +614,10 @@ public:
 	int current_song;
 
 	AnimationManager() {
-		enemies = (Enemy**)malloc(1000 * sizeof(Enemy*));
-		ebullets = (Bullet**)malloc(1000 * sizeof(Bullet*));
-		explosions = (Explosion**)malloc(1000 * sizeof(Explosion*));
-		resources = (Resource**)malloc(1000 * sizeof(Resource*));
+		enemies = new Enemy*[1000];
+		ebullets = new Bullet*[1000];
+		explosions = new Explosion*[1000];
+		resources = new Resource*[1000];
 		nr_enemies = nr_ebullets = nr_explosions = 0;
 		index_buffer = new unsigned int[NMAX * 6];
 		for (int i = 0; i < NMAX; i++) {
@@ -658,7 +659,8 @@ public:
 
 	void Update() {
 
-		if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_0) || click_flag == 0) {
+		if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_0) || click_flag == 0
+			|| GLFW_PRESS == glfwGetKey(window, GLFW_KEY_BACKSPACE)) {
 			if (current_song != 1)
 				PlaySound(TEXT("../Data/Wavs/homescreen.wav"), NULL, SND_ASYNC | SND_LOOP);
 			current_song = 1;
@@ -1177,10 +1179,10 @@ public:
 		for (int i = 0; i < nr_resources;) {
 			if (square_intersect(player->v, resources[i]->v)) {
 				if (resources[i]->type == 1) {
-					score -= 50;
-					player->health -= 200;
+					score -= 300 * resources[i]->size;
+					player->health -= 1500 * resources[i]->size;
 				}
-				if (resources[i]->type == 2) score += 100;
+				if (resources[i]->type == 2) score += 750 * resources[i]->size;
 				delete  resources[i];
 				resources[i] = resources[--nr_resources];
 			}
